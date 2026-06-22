@@ -17,6 +17,7 @@
 - 已创建项目说明、状态记录、任务清单和 AI 工作规则文档
 - 已连接 GitHub 远程仓库：`https://github.com/willbegreaterhk-boop/aso-sbrain.git`
 - 已验证 Windows 当前环境可以 push 到 GitHub
+- 已验证 macOS 当前环境可以 clone / pull GitHub 仓库
 
 ## 当前最高优先级
 1. 确保 Windows 和 macOS 项目文件一致
@@ -27,6 +28,7 @@
 - 2026-06-22：创建跨设备同步文档、AI 接手规则、TODO 清单和前端/本地项目 `.gitignore`
 - 2026-06-22：初始化当前目录 Git 仓库
 - 2026-06-22：连接 GitHub 远程仓库并成功推送 `main` 分支
+- 2026-06-22：确认 macOS 可以 clone / pull 当前 GitHub 仓库
 
 ## 给 AI 的接手说明
 每次开始工作前，必须先读取：

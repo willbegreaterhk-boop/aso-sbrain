@@ -4,7 +4,7 @@
 - [x] 确认当前目录已初始化 Git
 - [x] 确认 GitHub 远程仓库已连接
 - [x] 确认 Windows 可以 push
-- [ ] 确认 macOS 可以 clone / pull
+- [x] 确认 macOS 可以 clone / pull
 - [ ] 确认 `brain-two.html` 可以正常打开
 - [ ] 整理项目目录结构
 - [ ] 明确下一步是否接入 API
@@ -14,3 +14,4 @@
 - [x] 初始化当前目录 Git 仓库
 - [x] 连接 GitHub 远程仓库 `willbegreaterhk-boop/aso-sbrain`
 - [x] 将本地 `main` 分支成功推送到 GitHub
+- [x] 在 macOS 成功 clone 并执行 pull
