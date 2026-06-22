@@ -12,8 +12,11 @@
 ## 当前进度
 - 当前目录正在建立跨设备同步机制
 - 当前目录正在建立 AI 接手规则
-- 当前目录暂未检测到 `brain-two.html`，需要从历史 Windows 环境或 GitHub 仓库同步确认
+- 当前目录暂未检测到 `brain-two.html`
+- 已从 GitHub 远程仓库同步到 `index.html`、`DEPLOY.md` 和 `CNAME`
 - 已创建项目说明、状态记录、任务清单和 AI 工作规则文档
+- 已连接 GitHub 远程仓库：`https://github.com/willbegreaterhk-boop/aso-sbrain.git`
+- 已验证 Windows 当前环境可以 push 到 GitHub
 
 ## 当前最高优先级
 1. 确保 Windows 和 macOS 项目文件一致
@@ -23,6 +26,7 @@
 ## 最近一次修改记录
 - 2026-06-22：创建跨设备同步文档、AI 接手规则、TODO 清单和前端/本地项目 `.gitignore`
 - 2026-06-22：初始化当前目录 Git 仓库
+- 2026-06-22：连接 GitHub 远程仓库并成功推送 `main` 分支
 
 ## 给 AI 的接手说明
 每次开始工作前，必须先读取：
