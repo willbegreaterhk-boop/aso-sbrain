@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>brain two</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#15171E; --surface:#1C1F27; --surface-2:#232733; --line:#2E323D;
+    --text:#E7E4DB; --muted:#8B909C; --faint:#5A6070;
+    --live:#F0B45E; --live-glow:rgba(240,180,94,.22);
+    --personal:#CE8C7F; --dormant:#565E6E;
+    --display:'Space Grotesk',sans-serif;
+    --body:'Inter','PingFang SC','Microsoft YaHei','Noto Sans SC',system-ui,sans-serif;
+    --mono:'Space Mono','SF Mono',ui-monospace,monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--bg); color:var(--text); font-family:var(--body); font-size:15px;
+    line-height:1.55; -webkit-font-smoothing:antialiased; padding:0 0 64px}
+  .wrap{max-width:1060px; margin:0 auto; padding:0 22px}
+
+  .app-head{display:flex; align-items:center; justify-content:space-between; gap:16px;
+    padding:24px 0 14px; flex-wrap:wrap}
+  .mark{font-family:var(--display); font-weight:700; font-size:22px; letter-spacing:.3px;
+    display:flex; align-items:center; gap:11px}
+  .mark .glyph{color:var(--live); font-size:19px; filter:drop-shadow(0 0 7px var(--live-glow))}
+  .mark .v{font-family:var(--mono); font-size:11px; color:var(--faint); font-weight:400;
+    border:1px solid var(--line); border-radius:5px; padding:1px 6px; letter-spacing:.5px}
+
+  .hero{position:relative; border:1px solid var(--line); border-radius:16px;
+    background:radial-gradient(120% 130% at 74% 46%, rgba(240,180,94,.08), transparent 58%), var(--surface);
+    padding:14px 18px 10px; overflow:hidden}
+  .hero__eyebrow{font-family:var(--mono); font-size:10.5px; letter-spacing:1.6px;
+    text-transform:uppercase; color:var(--faint); margin:6px 4px 4px}
+  .brain-stage{position:relative; width:100%; max-width:600px; height:340px; margin:0 auto}
+  .brain-stage canvas{display:block; width:100%; height:100%; touch-action:none; cursor:grab}
+  .brain-stage canvas.grabbing{cursor:grabbing}
+  .brain-stage .fallback{position:absolute; inset:0; display:flex; align-items:center;
+    justify-content:center; text-align:center; color:var(--muted); font-size:13px; padding:20px}
+
+  .brain-tip{position:absolute; pointer-events:none; opacity:0; transform:translate(-50%,-115%);
+    background:#0F1116; border:1px solid var(--line); border-radius:8px; padding:7px 10px;
+    font-size:12px; white-space:nowrap; transition:opacity .12s ease; z-index:5;
+    box-shadow:0 10px 30px -16px #000}
+  .brain-tip.show{opacity:1}
+  .brain-tip b{font-weight:600}
+  .brain-tip .st{font-family:var(--mono); font-size:10px; margin-left:7px}
+  .brain-tip .st--live{color:var(--live)} .brain-tip .st--off{color:var(--faint)}
+
+  .hero__bar{display:flex; align-items:center; justify-content:center; gap:18px; flex-wrap:wrap;
+    padding:6px 4px 8px; font-family:var(--mono); font-size:11px; color:var(--muted)}
+  .leg{display:inline-flex; align-items:center; gap:6px}
+  .leg i{width:8px; height:8px; border-radius:50%; display:inline-block}
+  .leg--live i{background:var(--live); box-shadow:0 0 6px var(--live-glow)}
+  .leg--off i{background:#262a34; border:1px solid var(--dormant)}
+  .hero__status b{color:var(--live)}
+  .hero__hint{color:var(--faint)}
+
+  .bar{display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+    margin:26px 0 16px; padding-bottom:16px; border-bottom:1px solid var(--line)}
+  .tabs{display:flex; gap:4px; background:var(--surface); border:1px solid var(--line); border-radius:9px; padding:4px}
+  .tab{font-family:inherit; font-size:13.5px; font-weight:600; color:var(--muted); background:none;
+    border:none; cursor:pointer; padding:6px 13px; border-radius:6px; letter-spacing:.3px}
+  .tab[aria-selected="true"]{color:var(--bg); background:var(--live)}
+  .tab--personal[aria-selected="true"]{background:var(--personal)}
+  .search{flex:1 1 200px; min-width:160px; background:var(--surface); border:1px solid var(--line);
+    border-radius:8px; color:var(--text); font-family:inherit; font-size:14px; padding:9px 12px}
+  .search::placeholder{color:var(--faint)}
+  select.filt{background:var(--surface); border:1px solid var(--line); border-radius:8px; color:var(--text);
+    font-family:inherit; font-size:13px; padding:9px 10px; cursor:pointer}
+  .btn{font-family:inherit; font-size:13.5px; font-weight:600; cursor:pointer; border-radius:8px;
+    padding:9px 15px; border:1px solid var(--line); background:var(--surface); color:var(--text); letter-spacing:.3px}
+  .btn:hover{border-color:var(--muted)}
+  .btn--primary{background:var(--live); color:#1a1205; border-color:var(--live)}
+  .btn--primary:hover{filter:brightness(1.06)}
+  .btn--ghost{background:none}
+  :focus-visible{outline:2px solid var(--live); outline-offset:2px}
+
+  .grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(268px,1fr)); gap:14px}
+  .card{position:relative; background:var(--surface); border:1px solid var(--line); border-radius:12px;
+    padding:16px 16px 13px; display:flex; flex-direction:column; gap:10px;
+    transition:transform .15s ease, border-color .15s ease}
+  .card:hover{transform:translateY(-2px); border-color:#3a3f4d}
+  .card__del{position:absolute; top:8px; right:8px; width:22px; height:22px; line-height:1;
+    border:1px solid var(--line); background:var(--surface-2); color:var(--muted); border-radius:6px;
+    font-size:15px; cursor:pointer; opacity:0; transition:opacity .12s ease, color .12s ease}
+  .card:hover .card__del{opacity:1}
+  .card__del:hover{color:var(--personal); border-color:var(--personal)}
+  .card__chips{display:flex; gap:6px; align-items:center; flex-wrap:wrap}
+  .chip{font-family:var(--mono); font-size:10.5px; letter-spacing:.4px; padding:2px 7px; border-radius:5px; border:1px solid var(--line)}
+  .chip--domain{color:var(--live); border-color:rgba(240,180,94,.3)}
+  .lib-personal .chip--domain{color:var(--personal); border-color:rgba(206,140,127,.32)}
+  .chip--type{color:var(--muted)}
+  .chip--sample{margin-left:auto; color:var(--faint)}
+  .card__title{font-family:var(--display); font-weight:500; font-size:16.5px; line-height:1.3; margin:0}
+  .card__body{font-size:13.5px; color:#C9C6BD; margin:0; flex:1}
+  .card__meta{font-family:var(--mono); font-size:10.5px; color:var(--faint);
+    display:flex; gap:10px; flex-wrap:wrap; padding-top:9px; border-top:1px solid var(--line)}
+  .dot-conf{color:var(--live)} .conf-med{color:var(--muted)} .conf-low{color:var(--faint)}
+
+  .empty,.notice{border:1px dashed var(--line); border-radius:12px; padding:34px 26px;
+    text-align:center; color:var(--muted); grid-column:1/-1}
+  .empty h3,.notice h3{font-family:var(--display); color:var(--text); font-weight:500; font-size:17px; margin:0 0 8px}
+  .empty p,.notice p{margin:0 auto; max-width:430px; font-size:13.5px}
+  .notice{border-color:rgba(206,140,127,.4)} .notice h3{color:var(--personal)}
+
+  .modal{position:fixed; inset:0; background:rgba(8,9,13,.66); backdrop-filter:blur(2px);
+    display:none; align-items:flex-start; justify-content:center; padding:40px 18px; z-index:40; overflow-y:auto}
+  .modal.open{display:flex}
+  .sheet{background:var(--surface); border:1px solid var(--line); border-radius:14px; width:100%; max-width:520px; padding:22px}
+  .sheet h2{font-family:var(--display); font-weight:500; font-size:18px; margin:0 0 4px}
+  .sheet .sub{font-size:12.5px; color:var(--muted); margin:0 0 18px}
+  .field{margin-bottom:13px}
+  .field label{display:block; font-family:var(--mono); font-size:10.5px; letter-spacing:.5px;
+    text-transform:uppercase; color:var(--faint); margin-bottom:5px}
+  .field input,.field textarea,.field select{width:100%; background:var(--surface-2); border:1px solid var(--line);
+    border-radius:8px; color:var(--text); font-family:inherit; font-size:14px; padding:9px 11px}
+  .field textarea{resize:vertical; min-height:74px}
+  .row2{display:grid; grid-template-columns:1fr 1fr; gap:11px}
+  .sheet-foot{display:flex; gap:10px; justify-content:flex-end; margin-top:18px}
+
+  .foot{margin-top:30px; padding-top:18px; border-top:1px solid var(--line);
+    font-size:12px; color:var(--faint); line-height:1.7}
+  .foot code{font-family:var(--mono); color:var(--muted)}
+
+  @media (max-width:560px){
+    .grid{grid-template-columns:1fr}
+    .search{order:3; flex-basis:100%}
+    .brain-stage{height:260px}
+    .hero__bar{gap:12px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="app-head">
+    <div class="mark"><span class="glyph">◑</span>brain two <span class="v">v1</span></div>
+    <button class="btn btn--primary" id="captureBtn">+ 录入卡片</button>
+  </header>
+
+  <section class="hero">
+    <p class="hero__eyebrow">第二个大脑 · 现在是一具身体，智能分阶段点亮</p>
+    <div class="brain-stage" id="stage">
+      <div class="fallback" id="fallback" hidden>3D 大脑需要 WebGL。换支持 WebGL 的浏览器即可看到立体版。</div>
+    </div>
+    <div class="brain-tip" id="tip"></div>
+    <div class="hero__bar">
+      <span class="hero__status"><b>3</b> / 6 模块在线 · 大脑半醒</span>
+      <span class="leg leg--live"><i></i>已上线</span>
+      <span class="leg leg--off"><i></i>待激活</span>
+      <span class="hero__hint">· 拖动旋转</span>
+    </div>
+  </section>
+
+  <div class="bar">
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" aria-selected="true" data-lib="business">业务库</button>
+      <button class="tab tab--personal" role="tab" aria-selected="false" data-lib="personal">个人库</button>
+    </div>
+    <input class="search" id="search" type="search" placeholder="搜标题或内容…" aria-label="搜索卡片">
+    <select class="filt" id="fDomain" aria-label="按域筛选"></select>
+    <select class="filt" id="fType" aria-label="按类型筛选"></select>
+    <button class="btn btn--ghost" id="importBtn">导入</button>
+    <button class="btn btn--ghost" id="exportBtn">导出 JSON</button>
+    <input type="file" id="importFile" accept="application/json,.json" hidden>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  <div class="foot">
+    零自有 API · 单文件 · 可直接部署到你的域名（默认 GitHub Pages；也可丢任意静态主机）。3D 仅用 CDN 上的 three.js。<br>
+    亮模块已上线；<code>蒸馏 / 推理建议</code> 待接入 Anthropic API（Phase 2），<code>主动推送</code> 待 n8n（Phase 3）。<br>
+    录入自动存到本设备浏览器（localStorage），刷新后还在；跨设备 / 进 repo 用 <code>导出</code> 与 <code>导入</code> JSON。个人库仅本地、不随站部署。
+  </div>
+</div>
+
+<div class="modal" id="modal">
+  <div class="sheet">
+    <h2>录入卡片</h2>
+    <p class="sub">一张卡 = 一个自洽的最小知识点。用自己的话写，别复制粘贴。</p>
+    <div class="row2">
+      <div class="field"><label>域 domain</label><select id="cDomain"></select></div>
+      <div class="field"><label>类型 type</label><select id="cType"></select></div>
+    </div>
+    <div class="field"><label>标题 title</label><input id="cTitle" placeholder="一句话说清这条是什么"></div>
+    <div class="field"><label>正文 body</label><textarea id="cBody" placeholder="2–5 句核心"></textarea></div>
+    <div class="field"><label>背景 context</label><input id="cContext" placeholder="当时为什么想到这个（可空）"></div>
+    <div class="row2">
+      <div class="field"><label>把握 confidence</label>
+        <select id="cConf"><option value="high">high</option><option value="medium">medium</option><option value="low">low</option></select></div>
+      <div class="field"><label>来源 source</label><input id="cSource" placeholder="对话日期 / 调研来源（可空）"></div>
+    </div>
+    <div class="sheet-foot">
+      <button class="btn btn--ghost" id="cancelBtn">取消</button>
+      <button class="btn btn--primary" id="saveBtn">存入当前库</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+/* ---------- card workspace (no 3D dependency) ---------- */
+(function(){
+  "use strict";
+  var $ = function(s){return document.querySelector(s);};
+  window.__brain = {};
+
+  var DOMAINS = {business:["电商","半导体","二手车","媒体"], personal:["原生家庭","球鞋"]};
+  var TYPES = ["框架","决策","事实","操作","开放问题","偏好","反思·洞察"];
+
+  var DEFAULT_BUSINESS_CARDS = [
+    {id:"card-0001", lib:"business", domain:"电商", type:"框架", sample:true,
+     title:"Patreon 授权套利链",
+     body:"订阅设计师 Patreon → 拿实体打印商业授权 → 亚马逊卖给没打印机、也不会去订阅的终端客户。本质是「订阅+设备」的信息差变现。订阅一断，销售权通常立即失效。",
+     conf:"high", status:"active", links:1},
+    {id:"card-0002", lib:"business", domain:"电商", type:"决策", sample:true,
+     title:"独立站 IP 红线",
+     body:"二创 IP（宝可梦/漫威/品牌 logo 等）在 Etsy 灰色生存，独立站绝对不能上——侵权下架+封支付。所有 STL 必须原创建模或拿到白纸黑字的商用授权。",
+     conf:"high", status:"active", links:1},
+    {id:"card-0003", lib:"business", domain:"电商", type:"决策", sample:true,
+     title:"独立站优先测三类",
+     body:"情绪叙事摆件 / 自研炫彩可动龙 / EDC 解压滑块。其中滑块蓝海度最高：成人自用刚需、复购稳、体积小利于跨境物流，且没被「龙/动物」卷烂。",
+     conf:"medium", status:"active", links:0}
+  ];
+
+  var LEGACY_STORE_KEY = "brain_two_cards_v1";
+  var STORE_KEYS = {
+    business:"brain_two_business_cards_v1",
+    personal:"brain_two_personal_cards_v1"
+  };
+  var shouldCleanupLegacy = false;
+  var cards = [];
+
+  function toText(v){return v==null ? "" : String(v);}
+  function normalizeCard(c, targetLib){
+    if(!c || typeof c!=="object") return null;
+    var lib = targetLib || (c.lib==="personal" ? "personal" : "business");
+    if(!DOMAINS[lib]) lib = "business";
+    var domain = toText(c.domain).trim();
+    if(DOMAINS[lib].indexOf(domain)<0) domain = DOMAINS[lib][0];
+    var type = toText(c.type).trim();
+    if(TYPES.indexOf(type)<0) type = TYPES[0];
+    var conf = toText(c.conf).trim();
+    if(["high","medium","low"].indexOf(conf)<0) conf = "medium";
+    var status = toText(c.status).trim();
+    if(["active","superseded","archived"].indexOf(status)<0) status = "active";
+    var links = Number(c.links || 0);
+    if(!isFinite(links) || links<0) links = 0;
+    return {
+      id:toText(c.id).trim() || ("card-"+Date.now()+"-"+Math.random().toString(16).slice(2,6)),
+      lib:lib,
+      domain:domain,
+      type:type,
+      title:toText(c.title).trim(),
+      body:toText(c.body).trim(),
+      context:toText(c.context).trim(),
+      conf:conf,
+      source:toText(c.source).trim(),
+      status:status,
+      links:Math.floor(links),
+      sample:!!c.sample && lib==="business"
+    };
+  }
+  function normalizeList(list, lib){
+    return (Array.isArray(list)?list:[]).map(function(c){return normalizeCard(c, lib);}).filter(Boolean);
+  }
+
+  var storage = {
+    read:function(key){ try{ var s=localStorage.getItem(key); return s?JSON.parse(s):null; }catch(e){ return null; } },
+    load:function(){
+      var business = this.read(STORE_KEYS.business);
+      var personal = this.read(STORE_KEYS.personal);
+      if(!Array.isArray(business) && !Array.isArray(personal)){
+        var legacy = this.read(LEGACY_STORE_KEY);
+        if(Array.isArray(legacy)){
+          shouldCleanupLegacy = true;
+          business = legacy.filter(function(c){return !c || c.lib!=="personal";});
+          personal = legacy.filter(function(c){return c && c.lib==="personal";});
+        }
+      }
+      if(!Array.isArray(business)) business = DEFAULT_BUSINESS_CARDS;
+      if(!Array.isArray(personal)) personal = [];
+      return normalizeList(business, "business").concat(normalizeList(personal, "personal"));
+    },
+    save:function(){
+      try{
+        localStorage.setItem(STORE_KEYS.business, JSON.stringify(cards.filter(function(c){return c.lib==="business";})));
+        localStorage.setItem(STORE_KEYS.personal, JSON.stringify(cards.filter(function(c){return c.lib==="personal";})));
+        if(shouldCleanupLegacy){ localStorage.removeItem(LEGACY_STORE_KEY); shouldCleanupLegacy = false; }
+        return true;
+      }catch(e){ return false; }
+    }
+  };
+  cards = storage.load();
+
+  var state = {lib:"business", domain:"all", type:"all", q:""};
+
+  function fillSelect(el, items, withAll){
+    var opts = withAll ? '<option value="all">全部 '+withAll+'</option>' : '';
+    opts += items.map(function(i){return '<option value="'+i+'">'+i+'</option>';}).join("");
+    el.innerHTML = opts;
+  }
+  function refreshFilters(){
+    fillSelect($("#fDomain"), DOMAINS[state.lib], "域");
+    fillSelect($("#fType"), TYPES, "类型");
+    $("#fDomain").value="all"; $("#fType").value="all";
+  }
+  function confClass(c){return c==="high"?"dot-conf":c==="medium"?"conf-med":"conf-low";}
+  function esc(s){return (s||"").replace(/[&<>"]/g,function(ch){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch];});}
+  function nextId(){
+    var max = 0;
+    cards.forEach(function(c){
+      var m = /^card-(\d+)$/.exec(c.id || "");
+      if(m) max = Math.max(max, Number(m[1]));
+    });
+    return "card-"+String(max+1).padStart(4,"0");
+  }
+
+  function render(){
+    var grid = $("#grid");
+    document.body.classList.toggle("lib-personal", state.lib==="personal");
+    if(state.lib==="personal" && cards.filter(function(c){return c.lib==="personal";}).length===0){
+      grid.innerHTML = '<div class="notice"><h3>个人库仅存在于本地</h3>'+
+        '<p>原生家庭这类反思/洞察不上公开域名，也不与业务卡共用存储或推理引擎。在本地 repo 建 personal/ 目录，这个库不随站部署。</p></div>';
+      return;
+    }
+    var list = cards.filter(function(c){
+      if(c.lib!==state.lib) return false;
+      if(state.domain!=="all" && c.domain!==state.domain) return false;
+      if(state.type!=="all" && c.type!==state.type) return false;
+      if(state.q && (c.title+" "+c.body).toLowerCase().indexOf(state.q.toLowerCase())<0) return false;
+      return true;
+    });
+    if(list.length===0){
+      var dl = state.domain==="all" ? "这个库" : "「"+state.domain+"」";
+      grid.innerHTML = '<div class="empty"><h3>'+dl+'还没有卡片</h3>'+
+        '<p>从右上角「+ 录入卡片」倒豆子，或等蒸馏管上线后从历史对话里抽。空着不是问题——内容比架构先来。</p></div>';
+      return;
+    }
+    grid.innerHTML = list.map(function(c){
+      return '<article class="card" data-id="'+c.id+'">'+
+        '<button class="card__del" data-del="'+c.id+'" title="删除" aria-label="删除卡片">×</button>'+
+        '<div class="card__chips">'+
+        '<span class="chip chip--domain">'+c.domain+'</span>'+
+        '<span class="chip chip--type">'+c.type+'</span>'+
+        (c.sample?'<span class="chip chip--sample">样卡</span>':'')+
+      '</div>'+
+      '<h3 class="card__title">'+esc(c.title)+'</h3>'+
+      '<p class="card__body">'+esc(c.body)+'</p>'+
+      '<div class="card__meta"><span>'+c.id+'</span>'+
+        '<span class="'+confClass(c.conf)+'">'+c.conf+'</span>'+
+        '<span>'+c.status+'</span><span>↳ '+(c.links||0)+'</span></div></article>';
+    }).join("");
+  }
+
+  document.querySelectorAll(".tab").forEach(function(t){
+    t.addEventListener("click", function(){
+      document.querySelectorAll(".tab").forEach(function(x){x.setAttribute("aria-selected","false");});
+      t.setAttribute("aria-selected","true");
+      state.lib=t.dataset.lib; state.domain="all"; state.type="all"; state.q="";
+      $("#search").value=""; refreshFilters(); render();
+    });
+  });
+  $("#search").addEventListener("input", function(e){state.q=e.target.value; render();});
+  $("#fDomain").addEventListener("change", function(e){state.domain=e.target.value; render();});
+  $("#fType").addEventListener("change", function(e){state.type=e.target.value; render();});
+  $("#grid").addEventListener("click", function(e){
+    var b = e.target.closest("[data-del]"); if(!b) return;
+    if(!confirm("删除这张卡？")) return;
+    var id=b.getAttribute("data-del");
+    cards = cards.filter(function(c){return c.id!==id;});
+    storage.save(); render();
+  });
+
+  var modal = $("#modal");
+  function openModal(){
+    fillSelect($("#cDomain"), DOMAINS[state.lib], false);
+    fillSelect($("#cType"), TYPES, false);
+    $("#cTitle").value=""; $("#cBody").value=""; $("#cContext").value=""; $("#cSource").value=""; $("#cConf").value="high";
+    modal.classList.add("open"); $("#cTitle").focus();
+  }
+  function closeModal(){modal.classList.remove("open");}
+  window.__brain.openCapture = openModal;
+  $("#captureBtn").addEventListener("click", openModal);
+  $("#cancelBtn").addEventListener("click", closeModal);
+  modal.addEventListener("click", function(e){if(e.target===modal) closeModal();});
+  document.addEventListener("keydown", function(e){if(e.key==="Escape") closeModal();});
+  $("#saveBtn").addEventListener("click", function(){
+    var title=$("#cTitle").value.trim();
+    if(!title){$("#cTitle").focus(); $("#cTitle").style.borderColor="var(--personal)"; return;}
+    cards.push({id:nextId(), lib:state.lib,
+      domain:$("#cDomain").value, type:$("#cType").value, title:title, body:$("#cBody").value.trim(),
+      context:$("#cContext").value.trim(), conf:$("#cConf").value, source:$("#cSource").value.trim(),
+      status:"active", links:0});
+    storage.save();
+    closeModal(); state.domain="all"; state.type="all"; state.q=""; $("#search").value="";
+    $("#fDomain").value="all"; $("#fType").value="all"; render();
+  });
+  $("#exportBtn").addEventListener("click", function(){
+    var current = cards.filter(function(c){return c.lib===state.lib;});
+    var blob=new Blob([JSON.stringify(current,null,2)],{type:"application/json"});
+    var a=document.createElement("a");
+    a.href=URL.createObjectURL(blob);
+    a.download=state.lib==="personal" ? "brain-two-personal-cards.local.json" : "brain-two-business-cards.json";
+    a.click();
+    URL.revokeObjectURL(a.href);
+  });
+  $("#importBtn").addEventListener("click", function(){$("#importFile").click();});
+  $("#importFile").addEventListener("change", function(e){
+    var f=e.target.files[0]; if(!f) return;
+    var rd=new FileReader();
+    rd.onload=function(){
+      try{
+        var parsed=JSON.parse(rd.result);
+        var arr=Array.isArray(parsed) ? parsed : (parsed && Array.isArray(parsed.cards) ? parsed.cards : null);
+        if(!arr) throw 0;
+        var incoming=normalizeList(arr, state.lib);
+        var byId={};
+        cards.filter(function(c){return c.lib===state.lib;}).forEach(function(c){byId[c.id]=c;});
+        incoming.forEach(function(c){ if(c&&c.id) byId[c.id]=c; });
+        cards=cards.filter(function(c){return c.lib!==state.lib;})
+          .concat(Object.keys(byId).map(function(k){return byId[k];}));
+        if(!storage.save()) alert("导入已进入内存，但浏览器没有允许本地保存。");
+        render();
+      }catch(err){ alert("导入失败：不是有效的卡片 JSON"); }
+      e.target.value="";
+    };
+    rd.readAsText(f);
+  });
+
+  refreshFilters(); render();
+})();
+
+/* ---------- 3D brain ---------- */
+window.addEventListener("load", function(){
+  var stage = document.getElementById("stage");
+  var tip = document.getElementById("tip");
+  var hero = document.querySelector(".hero");
+  var reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if(typeof THREE === "undefined" || !window.WebGLRenderingContext){
+    document.getElementById("fallback").hidden = false; return;
+  }
+
+  try{
+    var W = stage.clientWidth, H = stage.clientHeight;
+    var scene = new THREE.Scene();
+    var camera = new THREE.PerspectiveCamera(42, W/H, 0.1, 100);
+    camera.position.set(0, 0.1, 3.5);
+
+    var renderer = new THREE.WebGLRenderer({antialias:true, alpha:true});
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio||1, 2));
+    renderer.setSize(W, H);
+    stage.appendChild(renderer.domElement);
+    var canvas = renderer.domElement;
+
+    // lights: warm key on the awake side, cool fill on the dormant side
+    scene.add(new THREE.AmbientLight(0x3a4253, 0.6));
+    var key = new THREE.DirectionalLight(0xF0B45E, 1.15); key.position.set(3, 1.5, 2.5); scene.add(key);
+    var fill = new THREE.DirectionalLight(0x5577a0, 0.55); fill.position.set(-3, -1, -2); scene.add(fill);
+    var warmPt = new THREE.PointLight(0xF0B45E, 0.5, 8); warmPt.position.set(1.6, 0.4, 1.8); scene.add(warmPt);
+
+    var group = new THREE.Group(); scene.add(group);
+
+    // ---- procedural brain surface ----
+    function folds(x,y,z){
+      return 0.55*Math.sin(x*3.1+y*2.3)*Math.cos(z*3.4)
+           + 0.30*Math.sin(y*5.7-1.2)*Math.cos(x*5.1+0.6)
+           + 0.18*Math.sin(z*8.3+2.0)*Math.cos(y*7.9-0.4)
+           + 0.12*Math.sin((x+z)*11.0)*Math.cos(y*10.0);
+    }
+    function surface(x,y,z){ // x,y,z = unit direction
+      var n = folds(x,y,z);
+      var groove = Math.exp(-(z*z)/0.012) * (y>0?1:0.4) * 0.14; // central fissure at z≈0
+      var r = 1 + 0.07*n - groove;
+      return new THREE.Vector3(x*r*1.30, y*r*0.95, z*r*1.06);
+    }
+
+    function displace(g){
+      var p=g.attributes.position;
+      for(var k=0;k<p.count;k++){ var v=surface(p.getX(k),p.getY(k),p.getZ(k)); p.setXYZ(k,v.x,v.y,v.z); }
+      p.needsUpdate=true; g.computeVertexNormals(); return g;
+    }
+
+    // faint glass shell — lobed volume without looking solid
+    var shellGeo = displace(new THREE.SphereGeometry(1, 96, 64));
+    group.add(new THREE.Mesh(shellGeo, new THREE.MeshBasicMaterial({
+      color:0x2b333f, transparent:true, opacity:0.10, side:THREE.DoubleSide, depthWrite:false
+    })));
+
+    // fresnel rim — warm glowing silhouette, reads as a hologram edge
+    var fresnelMat = new THREE.ShaderMaterial({
+      uniforms:{ uColor:{value:new THREE.Color(0xF0B45E)}, uPower:{value:2.6}, uIntensity:{value:1.15} },
+      vertexShader:[
+        "varying vec3 vN; varying vec3 vView;",
+        "void main(){",
+        "  vec4 wp = modelMatrix * vec4(position,1.0);",
+        "  vN = normalize(mat3(modelMatrix) * normal);",
+        "  vView = normalize(cameraPosition - wp.xyz);",
+        "  gl_Position = projectionMatrix * viewMatrix * wp;",
+        "}"
+      ].join("\n"),
+      fragmentShader:[
+        "varying vec3 vN; varying vec3 vView;",
+        "uniform vec3 uColor; uniform float uPower; uniform float uIntensity;",
+        "void main(){",
+        "  float f = pow(1.0 - clamp(dot(normalize(vN), normalize(vView)),0.0,1.0), uPower);",
+        "  gl_FragColor = vec4(uColor * f * uIntensity, f);",
+        "}"
+      ].join("\n"),
+      transparent:true, blending:THREE.AdditiveBlending, depthWrite:false, side:THREE.FrontSide
+    });
+    group.add(new THREE.Mesh(shellGeo, fresnelMat));
+
+    // wireframe — the line layer, undulating with the gyri
+    var wireGeo = displace(new THREE.IcosahedronGeometry(1, 4));
+    group.add(new THREE.LineSegments(
+      new THREE.WireframeGeometry(wireGeo),
+      new THREE.LineBasicMaterial({color:0x6a7d96, transparent:true, opacity:0.24, depthWrite:false})
+    ));
+
+    // ---- nodes ----
+    var NODES = [
+      {name:"录入",   tag:"已上线",          live:true,  action:"capture", dir:[ 0.88, 0.06, 0.46]},
+      {name:"存储",   tag:"已上线",          live:true,  action:"grid",    dir:[ 0.52, 0.50, 0.18]},
+      {name:"检索",   tag:"已上线",          live:true,  action:"search",  dir:[ 0.30, 0.66,-0.38]},
+      {name:"蒸馏",   tag:"待 API · Phase 2", live:false, action:null,      dir:[-0.58, 0.40, 0.34]},
+      {name:"推理建议",tag:"待 API · Phase 2", live:false, action:null,      dir:[-0.74,-0.06,-0.32]},
+      {name:"主动推送",tag:"待 n8n · Phase 3", live:false, action:null,      dir:[-0.34,-0.50, 0.30]}
+    ];
+
+    function glowSprite(size, color){
+      var c = document.createElement("canvas"); c.width=c.height=64;
+      var g = c.getContext("2d");
+      var grd = g.createRadialGradient(32,32,0,32,32,32);
+      grd.addColorStop(0, color); grd.addColorStop(0.35,"rgba(240,180,94,0.35)"); grd.addColorStop(1,"rgba(240,180,94,0)");
+      g.fillStyle = grd; g.fillRect(0,0,64,64);
+      var tex = new THREE.CanvasTexture(c);
+      var m = new THREE.Sprite(new THREE.SpriteMaterial({map:tex, blending:THREE.AdditiveBlending, depthWrite:false, transparent:true}));
+      m.scale.set(size,size,1); return m;
+    }
+
+    var pickables = [];
+    NODES.forEach(function(nd){
+      var d = new THREE.Vector3(nd.dir[0],nd.dir[1],nd.dir[2]).normalize();
+      var p = surface(d.x,d.y,d.z).multiplyScalar(1.02);
+      nd.pos = p;
+      var core = new THREE.Mesh(
+        new THREE.SphereGeometry(nd.live?0.058:0.05, 24, 24),
+        nd.live ? new THREE.MeshBasicMaterial({color:0xF0B45E})
+                : new THREE.MeshBasicMaterial({color:0x47526a, transparent:true, opacity:0.95})
+      );
+      core.position.copy(p); core.userData.node = nd; group.add(core);
+      nd.core = core; pickables.push(core);
+      if(nd.live){
+        var halo = glowSprite(0.42, "rgba(240,180,94,0.95)"); halo.position.copy(p); group.add(halo); nd.halo = halo;
+      } else {
+        var ring = new THREE.Mesh(new THREE.RingGeometry(0.066,0.078,28),
+          new THREE.MeshBasicMaterial({color:0x4a5364, side:THREE.DoubleSide, transparent:true, opacity:0.5}));
+        ring.position.copy(p); ring.lookAt(p.clone().multiplyScalar(2)); group.add(ring);
+      }
+    });
+
+    // ---- edges (pipeline order) ----
+    function edge(a, b, live){
+      var mid = a.clone().add(b).multiplyScalar(0.5);
+      mid.multiplyScalar(1.16); // arc outward over the surface
+      var curve = new THREE.QuadraticBezierCurve3(a, mid, b);
+      var tube = new THREE.TubeGeometry(curve, 24, live?0.012:0.007, 8, false);
+      var mat = live ? new THREE.MeshBasicMaterial({color:0xF0B45E, transparent:true, opacity:0.65})
+                     : new THREE.MeshBasicMaterial({color:0x3c4250, transparent:true, opacity:0.5});
+      group.add(new THREE.Mesh(tube, mat));
+      return curve;
+    }
+    var liveCurves = [];
+    for(var e=0; e<NODES.length-1; e++){
+      var a=NODES[e], b=NODES[e+1];
+      var isLive = a.live && b.live;
+      var cv = edge(a.pos, b.pos, isLive);
+      if(isLive) liveCurves.push(cv);
+    }
+
+    // ---- traveling signals along the live arc ----
+    var signals = [];
+    if(!reduced && liveCurves.length){
+      for(var s=0;s<2;s++){
+        var sig = new THREE.Mesh(new THREE.SphereGeometry(0.026,12,12), new THREE.MeshBasicMaterial({color:0xFFE0A8}));
+        group.add(sig); signals.push({mesh:sig, t:s*0.5});
+      }
+    }
+
+    // ---- interaction: orbit drag + hover + click ----
+    var ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
+    var dragging=false, moved=false, lastX=0, lastY=0, downX=0, downY=0;
+    var targetRotX = 0.05, targetRotY = -0.5, hovered=null;
+    group.rotation.set(targetRotX, targetRotY, 0);
+
+    function setNDC(ev){
+      var r = canvas.getBoundingClientRect();
+      ndc.x = ((ev.clientX-r.left)/r.width)*2-1;
+      ndc.y = -((ev.clientY-r.top)/r.height)*2+1;
+    }
+    function pick(ev){
+      setNDC(ev); ray.setFromCamera(ndc, camera);
+      var hit = ray.intersectObjects(pickables, false);
+      return hit.length ? hit[0].object.userData.node : null;
+    }
+    function placeTip(nd){
+      var wp = nd.core.getWorldPosition(new THREE.Vector3()).project(camera);
+      var r = canvas.getBoundingClientRect(), hr = hero.getBoundingClientRect();
+      tip.style.left = ((wp.x*0.5+0.5)*r.width + (r.left-hr.left)) + "px";
+      tip.style.top  = ((-wp.y*0.5+0.5)*r.height + (r.top-hr.top)) + "px";
+    }
+    function showTip(nd){
+      tip.innerHTML = '<b>'+nd.name+'</b><span class="st '+(nd.live?'st--live':'st--off')+'">'+
+        (nd.live?'● ':'○ ')+nd.tag+'</span>';
+      placeTip(nd); tip.classList.add("show");
+    }
+
+    canvas.addEventListener("pointerdown", function(ev){
+      dragging=true; moved=false; lastX=downX=ev.clientX; lastY=downY=ev.clientY;
+      canvas.classList.add("grabbing"); canvas.setPointerCapture(ev.pointerId);
+    });
+    canvas.addEventListener("pointermove", function(ev){
+      if(dragging){
+        var dx=ev.clientX-lastX, dy=ev.clientY-lastY; lastX=ev.clientX; lastY=ev.clientY;
+        if(Math.abs(ev.clientX-downX)+Math.abs(ev.clientY-downY) > 4) moved=true;
+        targetRotY += dx*0.008; targetRotX += dy*0.008;
+        targetRotX = Math.max(-0.9, Math.min(0.9, targetRotX));
+      } else {
+        var nd = pick(ev);
+        if(nd){ hovered=nd; canvas.style.cursor = nd.live?"pointer":"grab"; showTip(nd); }
+        else { hovered=null; canvas.style.cursor="grab"; tip.classList.remove("show"); }
+      }
+    });
+    function endDrag(ev){
+      if(!dragging) return;
+      dragging=false; canvas.classList.remove("grabbing");
+      if(!moved){
+        var nd = pick(ev);
+        if(nd && nd.live && nd.action){
+          if(nd.action==="capture") window.__brain.openCapture();
+          else if(nd.action==="search"){var el=document.getElementById("search"); el.scrollIntoView({behavior:"smooth",block:"center"}); el.focus();}
+          else if(nd.action==="grid"){document.getElementById("grid").scrollIntoView({behavior:"smooth",block:"start"});}
+        }
+      }
+    }
+    canvas.addEventListener("pointerup", endDrag);
+    canvas.addEventListener("pointercancel", function(){dragging=false; canvas.classList.remove("grabbing");});
+
+    // ---- resize ----
+    function onResize(){
+      var w=stage.clientWidth, h=stage.clientHeight;
+      camera.aspect=w/h; camera.updateProjectionMatrix(); renderer.setSize(w,h);
+    }
+    window.addEventListener("resize", onResize);
+
+    // ---- loop ----
+    var clock = new THREE.Clock();
+    function animate(){
+      requestAnimationFrame(animate);
+      var dt = clock.getDelta();
+      if(!dragging && !hovered && !reduced) targetRotY += 0.16*dt;
+      group.rotation.y += (targetRotY - group.rotation.y)*0.12;
+      group.rotation.x += (targetRotX - group.rotation.x)*0.12;
+
+      if(signals.length){
+        var seg = liveCurves.length;
+        signals.forEach(function(sg){
+          sg.t += dt*0.28; if(sg.t>=seg) sg.t-=seg;
+          var idx=Math.floor(sg.t), local=sg.t-idx;
+          var pt = liveCurves[idx].getPoint(local);
+          sg.mesh.position.copy(pt);
+        });
+      }
+      if(hovered) placeTip(hovered);
+      renderer.render(scene, camera);
+    }
+    animate();
+
+  } catch(err){
+    document.getElementById("fallback").hidden = false;
+    if(console&&console.warn) console.warn("brain 3d init failed:", err);
+  }
+});
+</script>
+</body>
+</html>
