@@ -29,27 +29,27 @@
       linear-gradient(180deg, rgba(8,13,19,.36), rgba(8,13,19,.86) 72%, #080D13)}
   #flowField{position:fixed; inset:0; width:100%; height:100%; z-index:0; pointer-events:none; display:block}
   .wrap{position:relative; z-index:2; max-width:1120px; margin:0 auto; padding:0 22px}
+  .sr-only{position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden;
+    clip:rect(0,0,0,0); white-space:nowrap; border:0}
 
   .app-head{display:flex; align-items:center; justify-content:space-between; gap:16px;
     padding:24px 0 14px; flex-wrap:wrap}
   .mark{font-family:var(--display); font-weight:700; font-size:22px; letter-spacing:.3px;
     display:flex; align-items:center; gap:11px}
   .mark .glyph{color:var(--live); font-size:19px; filter:drop-shadow(0 0 7px var(--live-glow))}
-  .mark .v{font-family:var(--mono); font-size:11px; color:var(--faint); font-weight:400;
-    border:1px solid var(--line); border-radius:5px; padding:1px 6px; letter-spacing:.5px}
 
-  .hero{position:relative; display:grid; grid-template-columns:minmax(260px,.86fr) minmax(360px,1.14fr);
-    align-items:center; gap:18px; min-height:560px; padding:24px 0 8px; overflow:visible}
+  .hero{position:relative; display:grid; grid-template-columns:1fr; place-items:center;
+    min-height:calc(100vh - 76px); padding:0 0 24px; overflow:visible}
   .hero::after{content:""; position:absolute; left:50%; bottom:8px; width:78vw; max-width:980px; height:1px;
     transform:translateX(-50%); background:linear-gradient(90deg, transparent, rgba(122,231,216,.36), transparent)}
-  .hero__copy{grid-column:1; grid-row:1; min-width:0; padding:20px 0 16px}
+  .hero__copy{display:none}
   .hero__eyebrow{font-family:var(--mono); font-size:10.5px; letter-spacing:1.6px;
     text-transform:uppercase; color:var(--live); margin:0 0 10px}
   .hero__title{font-family:var(--display); font-size:clamp(38px,7vw,74px); line-height:.93; margin:0;
     letter-spacing:0; max-width:620px; text-wrap:balance}
   .hero__lede{font-size:14px; color:#B8C7C9; max-width:520px; margin:16px 0 0}
-  .brain-shell{grid-column:2; grid-row:1 / span 2; position:relative; min-width:0}
-  .brain-stage{position:relative; width:100%; max-width:720px; height:470px; margin:0 auto}
+  .brain-shell{grid-column:1; grid-row:1; position:relative; min-width:0; width:100%}
+  .brain-stage{position:relative; width:100%; max-width:900px; height:min(70vh,620px); min-height:430px; margin:0 auto}
   .brain-stage canvas{display:block; width:100%; height:100%; touch-action:none; cursor:grab}
   .brain-stage canvas.grabbing{cursor:grabbing}
   .brain-stage .fallback{position:absolute; inset:0; display:flex; align-items:center;
@@ -60,12 +60,13 @@
     background:#0F1116; border:1px solid var(--line); border-radius:8px; padding:7px 10px;
     font-size:12px; white-space:nowrap; transition:opacity .12s ease; z-index:5;
     box-shadow:0 10px 30px -16px #000}
+  .hero .brain-tip{display:none}
   .brain-tip.show{opacity:1}
   .brain-tip b{font-weight:600}
   .brain-tip .st{font-family:var(--mono); font-size:10px; margin-left:7px}
   .brain-tip .st--live{color:var(--live)} .brain-tip .st--off{color:var(--faint)}
 
-  .hero__bar{display:flex; align-items:center; justify-content:center; gap:18px; flex-wrap:wrap;
+  .hero__bar{display:none; align-items:center; justify-content:center; gap:18px; flex-wrap:wrap;
     padding:2px 4px 8px; font-family:var(--mono); font-size:11px; color:var(--muted)}
   .leg{display:inline-flex; align-items:center; gap:6px}
   .leg i{width:8px; height:8px; border-radius:50%; display:inline-block}
@@ -74,7 +75,15 @@
   .hero__status b{color:var(--live)}
   .hero__hint{color:var(--faint)}
 
-  .domain-dock{grid-column:1; grid-row:2; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px; max-width:520px; margin-top:8px}
+  .domain-dock{grid-column:1; grid-row:1; position:absolute; left:50%; bottom:34px; transform:translateX(-50%);
+    display:flex; justify-content:center; align-items:center; gap:14px; width:min(420px,calc(100% - 40px))}
+  .domain-dot-btn{width:13px; height:13px; border-radius:50%; padding:0; border:1px solid rgba(122,231,216,.72);
+    background:var(--live); box-shadow:0 0 18px rgba(122,231,216,.40); cursor:pointer;
+    transition:transform .16s ease, box-shadow .16s ease, opacity .16s ease}
+  .domain-dot-btn:hover{transform:scale(1.34); box-shadow:0 0 30px rgba(122,231,216,.62)}
+  .domain-dot-btn.personal{background:var(--personal); border-color:rgba(233,149,164,.78);
+    box-shadow:0 0 18px rgba(233,149,164,.32)}
+  .domain-dot-btn.is-empty{opacity:.42; background:transparent}
   .domain-chip-btn{min-width:0; display:grid; grid-template-columns:1fr auto; align-items:center; gap:8px;
     background:rgba(17,25,34,.68); border:1px solid rgba(122,231,216,.18); color:var(--text); border-radius:10px;
     padding:10px 11px; cursor:pointer; text-align:left; backdrop-filter:blur(10px);
@@ -307,12 +316,11 @@
   @media (max-width:560px){
     .wrap{padding:0 16px}
     .app-head{padding-top:18px}
-    .hero{grid-template-columns:1fr; min-height:auto; gap:0; padding-top:10px}
-    .hero__copy{grid-column:1; grid-row:auto; order:1; padding:12px 0 10px}
-    .brain-shell{grid-column:1; grid-row:auto; order:2}
+    .hero{grid-template-columns:1fr; min-height:calc(100vh - 64px); gap:0; padding:0 0 22px}
+    .brain-shell{grid-column:1; grid-row:1}
     .hero__title{font-size:44px; line-height:.96}
     .hero__lede{font-size:13px; margin-top:12px}
-    .domain-dock{grid-column:1; grid-row:auto; order:3; grid-template-columns:1fr; margin-top:16px}
+    .domain-dock{grid-column:1; grid-row:1; bottom:26px; width:min(280px,calc(100% - 42px)); gap:12px}
     .domain-focus{padding:14px}
     .domain-focus__head{display:grid}
     .domain-focus__actions{justify-content:flex-start}
@@ -321,7 +329,7 @@
     .grid.is-list .card{display:flex}
     .search{order:3; flex-basis:100%}
     .view-toggle{order:4}
-    .brain-stage{height:320px}
+    .brain-stage{height:min(58vh,430px); min-height:360px}
     .hero__bar{gap:12px}
     .drawer__panel{padding:20px}
     .drawer__grid{grid-template-columns:1fr}
@@ -343,10 +351,10 @@
 <div class="wrap">
 
   <header class="app-head">
-    <div class="mark"><span class="glyph">◑</span>brain two <span class="v">v1</span></div>
+    <div class="mark"><span class="glyph">◑</span>brain two</div>
     <div class="head-actions">
-      <button class="btn icon-btn" id="commandBtn" title="打开命令面板" aria-label="打开命令面板">⌕</button>
-      <button class="btn btn--primary" id="captureBtn">+ 录入卡片</button>
+      <button class="btn icon-btn" id="commandBtn" aria-label="打开命令面板">⌕</button>
+      <button class="btn icon-btn btn--primary" id="captureBtn" aria-label="录入卡片">+</button>
     </div>
   </header>
 
@@ -811,8 +819,10 @@
     if(!dock) return;
     dock.innerHTML = domainSummaries().map(function(item){
       var personal = item.lib==="personal";
-      return '<button class="domain-chip-btn '+(personal?'personal':'')+'" data-domain-open="'+item.lib+'|'+esc(item.domain)+'">'+
-        '<span>'+libName(item.lib)+'</span><em>'+item.count+' 张</em><b>'+esc(item.domain)+'</b></button>';
+      var label = libName(item.lib)+" · "+item.domain+" · "+item.count+" 张";
+      return '<button class="domain-dot-btn '+(personal?'personal ':'')+(item.count?'' : 'is-empty')+
+        '" data-domain-open="'+item.lib+'|'+esc(item.domain)+'" aria-label="'+esc(label)+'">'+
+        '<span class="sr-only">'+esc(label)+'</span></button>';
     }).join("");
   }
   function renderDomainFocus(lib, domain){
