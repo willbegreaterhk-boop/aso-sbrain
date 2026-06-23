@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>brain two</title>
+<link rel="icon" href="data:,">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -96,6 +97,74 @@
     padding:5px 2px; cursor:pointer}
   .mini-action:hover{color:var(--text)}
   :focus-visible{outline:2px solid var(--live); outline-offset:2px}
+
+  .today{margin:22px 0 24px; border:1px solid var(--line); border-radius:14px;
+    background:linear-gradient(180deg, rgba(35,39,51,.86), rgba(28,31,39,.96)); padding:18px}
+  .today__head{display:flex; align-items:flex-start; justify-content:space-between; gap:14px; flex-wrap:wrap; margin-bottom:14px}
+  .today__kicker{font-family:var(--mono); font-size:10.5px; letter-spacing:1.5px; color:var(--faint);
+    text-transform:uppercase; margin:0 0 5px}
+  .today__title{font-family:var(--display); font-weight:500; font-size:20px; line-height:1.2; margin:0}
+  .today__sub{font-size:12.5px; color:var(--muted); margin:6px 0 0; max-width:560px}
+  .today__tools{display:flex; align-items:center; justify-content:flex-end; gap:8px; flex-wrap:wrap}
+  .today__date,.today__select,.today__input,.today__textarea,.today__endpoint{
+    background:var(--surface); border:1px solid var(--line); border-radius:8px; color:var(--text);
+    font-family:inherit; font-size:13px; padding:9px 10px; min-height:38px}
+  .today__date{width:148px}
+  .today__select{width:132px}
+  .today__select--wide{width:168px}
+  .today__endpoint{width:100%}
+  .today__grid{display:grid; grid-template-columns:minmax(0,1.08fr) minmax(300px,.92fr); gap:16px; align-items:start}
+  .today__panel{min-width:0; border-top:1px solid var(--line); padding-top:14px}
+  .today__panel--review{grid-column:1/-1}
+  .today__panel-head{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px}
+  .today__panel-head h3{font-family:var(--display); font-weight:500; font-size:16px; margin:0}
+  .today__note{font-size:12px; color:var(--muted); margin:0}
+  .entry-form{display:grid; grid-template-columns:98px 112px minmax(120px,1fr); gap:9px}
+  .entry-form textarea{grid-column:1/-1; min-height:76px; resize:vertical; line-height:1.55}
+  .entry-form__actions{grid-column:1/-1; display:flex; justify-content:flex-end; gap:9px; flex-wrap:wrap}
+  .entry-list{display:grid; gap:8px; margin-top:14px}
+  .entry-item{display:grid; grid-template-columns:58px minmax(0,1fr) auto; gap:10px; align-items:start;
+    border-top:1px solid var(--line); padding:10px 0}
+  .entry-item__time{font-family:var(--mono); font-size:11px; color:var(--live); padding-top:2px}
+  .entry-item__body{min-width:0}
+  .entry-item__meta{display:flex; gap:6px; flex-wrap:wrap; margin-bottom:4px}
+  .entry-item__text{font-size:13.5px; color:#D5D1C8; margin:0; overflow-wrap:anywhere}
+  .entry-item__actions{display:flex; justify-content:flex-end; gap:6px; flex-wrap:wrap}
+  .tiny-btn{font-family:var(--mono); font-size:10.5px; color:var(--muted); background:none; border:1px solid var(--line);
+    border-radius:6px; padding:4px 7px; cursor:pointer}
+  .tiny-btn:hover{color:var(--text); border-color:var(--muted)}
+  .fitness-strip{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px; margin-bottom:12px}
+  .fitness-stat{background:rgba(21,23,30,.52); border:1px solid var(--line); border-radius:8px; padding:9px}
+  .fitness-stat b{display:block; font-family:var(--display); color:#9DD7C5; font-size:18px; line-height:1.1}
+  .fitness-stat span{display:block; font-family:var(--mono); font-size:10px; color:var(--faint); margin-top:4px}
+  .fit-block{border-top:1px solid var(--line); padding-top:12px; margin-top:12px}
+  .fit-block__head{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:9px}
+  .fit-block__head h4{font-family:var(--display); font-weight:500; font-size:14.5px; margin:0}
+  .fit-list{display:grid; gap:8px}
+  .fit-row,.meal-row{display:grid; grid-template-columns:auto minmax(0,1fr) auto; gap:10px; align-items:center;
+    border-top:1px solid rgba(46,50,61,.72); padding:9px 0}
+  .fit-row:first-child,.meal-row:first-child{border-top:none}
+  .fit-check{width:28px; height:28px; border-radius:50%; border:1px solid var(--line); background:var(--surface);
+    color:var(--muted); cursor:pointer}
+  .fit-check.done{background:#9DD7C5; border-color:#9DD7C5; color:#101419}
+  .fit-name{font-size:13.5px; color:var(--text); overflow-wrap:anywhere}
+  .fit-detail{font-family:var(--mono); font-size:10.5px; color:var(--faint); margin-top:2px}
+  .fit-edit{display:none; grid-column:1/-1; grid-template-columns:repeat(3,minmax(70px,1fr)); gap:8px; padding:4px 0 2px 38px}
+  .fit-edit.open{display:grid}
+  .fit-edit textarea,.meal-log,.body-grid textarea{grid-column:1/-1; min-height:54px; resize:vertical}
+  .meal-log{grid-column:2/-1; width:100%}
+  .reminder-row{display:flex; gap:8px; flex-wrap:wrap; margin-top:8px}
+  .body-grid{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px}
+  .review-tools{display:grid; grid-template-columns:minmax(180px,1fr) auto auto; gap:9px; align-items:center}
+  .review-output{margin-top:13px; border-top:1px solid var(--line); padding-top:13px}
+  .review-score{display:flex; align-items:center; gap:12px; margin-bottom:12px}
+  .score-badge{width:58px; height:58px; border-radius:50%; border:1px solid rgba(240,180,94,.42);
+    display:flex; align-items:center; justify-content:center; font-family:var(--display); font-size:22px; color:var(--live);
+    background:rgba(240,180,94,.08); flex-shrink:0}
+  .review-summary{margin:0; color:#D9D5CC; font-size:13.5px}
+  .review-list{display:grid; gap:7px; margin:10px 0 0; padding:0; list-style:none}
+  .review-list li{border-left:2px solid rgba(240,180,94,.45); padding-left:9px; color:#C9C6BD; font-size:13px}
+  .local-note{font-size:11.5px; color:var(--faint); margin:10px 0 0}
 
   .grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(268px,1fr)); gap:14px}
   .card{position:relative; background:var(--surface); border:1px solid var(--line); border-radius:12px;
@@ -198,6 +267,16 @@
     .hero__bar{gap:12px}
     .drawer__panel{padding:20px}
     .drawer__grid{grid-template-columns:1fr}
+    .today{padding:14px}
+    .today__tools{justify-content:flex-start; width:100%}
+    .today__grid{grid-template-columns:1fr}
+    .entry-form,.review-tools{grid-template-columns:1fr}
+    .entry-item{grid-template-columns:1fr}
+    .entry-item__actions{justify-content:flex-start}
+    .fitness-strip,.body-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .fit-row,.meal-row{grid-template-columns:auto minmax(0,1fr)}
+    .fit-row .tiny-btn,.meal-row .tiny-btn{grid-column:2}
+    .fit-edit{padding-left:0; grid-template-columns:1fr 1fr}
   }
 </style>
 </head>
@@ -219,10 +298,92 @@
     </div>
     <div class="brain-tip" id="tip"></div>
     <div class="hero__bar">
-      <span class="hero__status"><b>3</b> / 6 模块在线 · 大脑半醒</span>
+      <span class="hero__status"><b>4</b> / 6 模块在线 · 今日循环 mock</span>
       <span class="leg leg--live"><i></i>已上线</span>
       <span class="leg leg--off"><i></i>待激活</span>
       <span class="hero__hint">· 拖动旋转</span>
+    </div>
+  </section>
+
+  <section class="today" id="todayLoop">
+    <div class="today__head">
+      <div>
+        <p class="today__kicker">Phase 2 · daily loop</p>
+        <h2 class="today__title">今日</h2>
+        <p class="today__sub">日志、健身和复盘只存在本机浏览器；个人导出走 .local，不进公开仓库。</p>
+      </div>
+      <div class="today__tools">
+        <button class="btn icon-btn" id="prevDayBtn" aria-label="前一天">‹</button>
+        <input class="today__date" id="dayDateInput" type="date" aria-label="选择日期">
+        <button class="btn icon-btn" id="nextDayBtn" aria-label="后一天">›</button>
+        <select class="today__select today__select--wide" id="dayQuickSelect" aria-label="日期列表"></select>
+      </div>
+    </div>
+
+    <div class="today__grid">
+      <section class="today__panel">
+        <div class="today__panel-head">
+          <div>
+            <h3>快记</h3>
+            <p class="today__note" id="entryCountText">0 条</p>
+          </div>
+          <button class="btn btn--ghost" id="exportDaysBtn">导出 .local</button>
+        </div>
+        <div class="entry-form">
+          <input class="today__input" id="entryTime" type="time" aria-label="记录时间">
+          <select class="today__select" id="entryTag" aria-label="记录标签"></select>
+          <input class="today__input" id="entryDomain" placeholder="domain 可空" aria-label="记录域">
+          <textarea class="today__textarea" id="entryText" placeholder="记下刚发生的事、想法或决定"></textarea>
+          <div class="entry-form__actions">
+            <button class="btn btn--ghost" id="entryCancelBtn" hidden>取消编辑</button>
+            <button class="btn btn--primary" id="entrySaveBtn">存入今日</button>
+          </div>
+        </div>
+        <div class="entry-list" id="entryList"></div>
+      </section>
+
+      <section class="today__panel">
+        <div class="today__panel-head">
+          <div>
+            <h3>健身位</h3>
+            <p class="today__note">读取 tracker 的 fitMobile 模型</p>
+          </div>
+          <button class="btn btn--ghost" id="fitnessSyncBtn">同步当天</button>
+        </div>
+        <div class="fitness-strip" id="fitnessSummary"></div>
+        <div class="fit-block">
+          <div class="fit-block__head">
+            <h4>训练</h4>
+            <select class="today__select today__select--wide" id="workoutDaySelect" aria-label="训练日"></select>
+          </div>
+          <div class="fit-list" id="workoutList"></div>
+        </div>
+        <div class="fit-block">
+          <div class="fit-block__head"><h4>饮食与打卡</h4></div>
+          <div class="fit-list" id="mealList"></div>
+          <div class="reminder-row" id="reminderList"></div>
+        </div>
+        <div class="fit-block">
+          <div class="fit-block__head"><h4>身体</h4></div>
+          <div class="body-grid" id="bodyFields"></div>
+        </div>
+      </section>
+
+      <section class="today__panel today__panel--review" id="reviewPanel">
+        <div class="today__panel-head">
+          <div>
+            <h3>今日复盘 mock</h3>
+            <p class="today__note">接口单点：requestReview(day)。默认 mock；换 endpoint 后 UI 不改。</p>
+          </div>
+        </div>
+        <div class="review-tools">
+          <input class="today__endpoint" id="reviewEndpoint" placeholder="mock://daily-review 或代理 endpoint" aria-label="review endpoint">
+          <button class="btn btn--ghost" id="saveEndpointBtn">保存 endpoint</button>
+          <button class="btn btn--primary" id="reviewBtn">生成今日复盘</button>
+        </div>
+        <p class="local-note" id="reviewStatus">mock 模式，不接真实 API，不需要 key。</p>
+        <div class="review-output" id="reviewOutput"></div>
+      </section>
     </div>
   </section>
 
@@ -249,8 +410,8 @@
 
   <div class="foot">
     零自有 API · 单文件 · 可直接部署到你的域名（默认 GitHub Pages；也可丢任意静态主机）。3D 仅用 CDN 上的 three.js。<br>
-    亮模块已上线；<code>蒸馏 / 推理建议</code> 待接入 Anthropic API（Phase 2），<code>主动推送</code> 待 n8n（Phase 3）。<br>
-    录入自动存到本设备浏览器（localStorage），刷新后还在；跨设备 / 进 repo 用 <code>导出</code> 与 <code>导入</code> JSON。个人库仅本地、不随站部署。
+    亮模块已上线；<code>今日循环 / 推理建议 mock</code> 已接入，真代理与 key 暂缓到 P2.3，<code>主动推送</code> 待 n8n（Phase 3）。<br>
+    卡片、日志、健身和复盘自动存到本设备浏览器（localStorage）；个人数据导出使用 <code>.local</code>，不进公开仓库。
   </div>
 </div>
 
@@ -538,6 +699,7 @@
       {name:"切换到个人库", hint:"library", run:function(){switchLib("personal"); closeCmd();}},
       {name:"网格视图", hint:"view", run:function(){setView("grid"); closeCmd();}},
       {name:"列表视图", hint:"view", run:function(){setView("list"); closeCmd();}},
+      {name:"今日复盘", hint:"daily", run:function(){closeCmd(); if(window.__brain.openDailyReview) window.__brain.openDailyReview();}},
       {name:"导入 JSON", hint:"data", run:function(){closeCmd(); $("#importFile").click();}},
       {name:"导出当前库", hint:"data", run:function(){closeCmd(); $("#exportBtn").click();}},
       {name:"清空筛选", hint:"filter", run:function(){state.domain="all"; state.type="all"; state.q=""; $("#search").value=""; $("#fDomain").value="all"; $("#fType").value="all"; render(); closeCmd();}}
@@ -694,6 +856,581 @@
   refreshFilters(); render();
 })();
 
+/* ---------- daily loop (local-only data + review mock) ---------- */
+(function(){
+  "use strict";
+  var $ = function(s){return document.querySelector(s);};
+
+  var DAY_STORE_KEY = "brain_two_days_v1";
+  var FITNESS_STORE_KEY = "fitMobile";
+  var ENDPOINT_STORE_KEY = "brain_two_review_endpoint_v1";
+  var ENTRY_TAGS = ["工作","健身","个人","想法","决策"];
+  var WORKOUTS = {
+    day1:{label:"Day1 胸日（推）", exercises:[
+      {name:"平板杠铃卧推", defaultSets:5, defaultReps:6, defaultWeight:80, tag:"主项死守"},
+      {name:"上斜哑铃卧推", defaultSets:4, defaultReps:8, defaultWeight:60, tag:"上胸"},
+      {name:"双杠臂屈伸", defaultSets:4, defaultReps:8, defaultWeight:0, tag:"自重"},
+      {name:"绳索下压", defaultSets:3, defaultReps:10, defaultWeight:null, tag:"三头外侧"},
+      {name:"俯身哑铃臂屈伸", defaultSets:3, defaultReps:10, defaultWeight:null, tag:"三头长头"}
+    ], cardio:true},
+    day2:{label:"Day2 背日（拉）", exercises:[
+      {name:"宽握引体向上", defaultSets:5, defaultReps:8, defaultWeight:0, tag:"自重"},
+      {name:"杠铃划船", defaultSets:4, defaultReps:8, defaultWeight:80, tag:"主项死守"},
+      {name:"固定轨迹划船", defaultSets:4, defaultReps:8, defaultWeight:80, tag:"中背"},
+      {name:"杠铃弯举", defaultSets:3, defaultReps:8, defaultWeight:null, tag:"二头"},
+      {name:"21枪弯举", defaultSets:3, defaultReps:21, defaultWeight:20, tag:"20kg杠铃"}
+    ], cardio:true},
+    day3:{label:"Day3 肩日 + 腹肌", exercises:[
+      {name:"坐姿推举", defaultSets:3, defaultReps:10, defaultWeight:60, tag:"戴腰带"},
+      {name:"绳索后束飞鸟", defaultSets:4, defaultReps:10, defaultWeight:null, tag:"肩后束"},
+      {name:"哑铃反向飞鸟", defaultSets:4, defaultReps:10, defaultWeight:null, tag:"3D肩"},
+      {name:"侧平举+提拉超级组", defaultSets:3, defaultReps:8, defaultWeight:10, tag:"中束"},
+      {name:"悬垂举腿", defaultSets:4, defaultReps:18, defaultWeight:0, tag:"下腹"},
+      {name:"绳索跪姿卷腹", defaultSets:4, defaultReps:15, defaultWeight:null, tag:"负重"}
+    ], cardio:false},
+    rest:{label:"休息日", exercises:[], cardio:false}
+  };
+  var MEALS = [
+    {id:"breakfast", title:"早餐", cal:"约480大卡", macros:"P28 C72 F12", p:28, c:72, f:12},
+    {id:"lunch", title:"午餐（训前2-3h）", cal:"约680大卡", macros:"P48 C95 F14", p:48, c:95, f:14},
+    {id:"postworkout", title:"训后补给", cal:"约360大卡", macros:"P31 C48 F4", p:31, c:48, f:4},
+    {id:"dinner", title:"晚餐", cal:"约530大卡", macros:"P55 C48 F12", p:55, c:48, f:12}
+  ];
+
+  var days = loadObject(DAY_STORE_KEY);
+  var fitnessData = loadObject(FITNESS_STORE_KEY);
+  var currentDate = dateKey(new Date());
+  var editingEntryId = null;
+
+  function toText(v){return v==null ? "" : String(v);}
+  function esc(s){return toText(s).replace(/[&<>"]/g,function(ch){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[ch];
+  });}
+  function clone(v){
+    try{return JSON.parse(JSON.stringify(v));}catch(e){return v && typeof v==="object" ? Object.assign({}, v) : v;}
+  }
+  function loadObject(key){
+    try{
+      var raw = localStorage.getItem(key);
+      var parsed = raw ? JSON.parse(raw) : {};
+      return parsed && typeof parsed==="object" && !Array.isArray(parsed) ? parsed : {};
+    }catch(e){ return {}; }
+  }
+  function saveObject(key, value){
+    try{ localStorage.setItem(key, JSON.stringify(value)); return true; }catch(e){ return false; }
+  }
+  function readSetting(key, fallback){
+    try{ return localStorage.getItem(key) || fallback; }catch(e){ return fallback; }
+  }
+  function writeSetting(key, value){
+    try{ localStorage.setItem(key, value); return true; }catch(e){ return false; }
+  }
+  function dateKey(d){
+    return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+  }
+  function parseDateKey(key){
+    var parts = toText(key).split("-").map(Number);
+    if(parts.length!==3 || !parts[0] || !parts[1] || !parts[2]) return new Date();
+    return new Date(parts[0], parts[1]-1, parts[2]);
+  }
+  function shiftDate(key, delta){
+    var d = parseDateKey(key);
+    d.setDate(d.getDate()+delta);
+    return dateKey(d);
+  }
+  function nowTime(){
+    var d = new Date();
+    return String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0");
+  }
+  function nextEntryId(){
+    return "entry-"+Date.now().toString(36)+"-"+Math.random().toString(16).slice(2,6);
+  }
+  function normalizeEntry(entry){
+    if(!entry || typeof entry!=="object") return null;
+    var tag = toText(entry.tag).trim();
+    if(ENTRY_TAGS.indexOf(tag)<0) tag = ENTRY_TAGS[0];
+    return {
+      id:toText(entry.id).trim() || nextEntryId(),
+      time:toText(entry.time).trim() || "00:00",
+      text:toText(entry.text).trim(),
+      tag:tag,
+      domain:toText(entry.domain).trim(),
+      linkedCardId:toText(entry.linkedCardId).trim()
+    };
+  }
+  function normalizeDay(raw, key){
+    var day = raw && typeof raw==="object" ? raw : {};
+    return {
+      date:toText(day.date).trim() || key,
+      entries:(Array.isArray(day.entries)?day.entries:[]).map(normalizeEntry).filter(function(e){return e && e.text;}),
+      fitness:day.fitness && typeof day.fitness==="object" ? day.fitness : null,
+      review:day.review && typeof day.review==="object" ? day.review : null
+    };
+  }
+  function ensureDay(key){
+    days[key] = normalizeDay(days[key], key);
+    days[key].date = key;
+    return days[key];
+  }
+  function persistDays(){
+    return saveObject(DAY_STORE_KEY, days);
+  }
+  function ensureFitnessRec(key){
+    var rec = fitnessData[key];
+    if(!rec || typeof rec!=="object" || Array.isArray(rec)) rec = {};
+    if(!rec.exercises || typeof rec.exercises!=="object") rec.exercises = {};
+    if(!rec.exDetails || typeof rec.exDetails!=="object") rec.exDetails = {};
+    if(!rec.workoutDay) rec.workoutDay = "day1";
+    if(!rec.meals || typeof rec.meals!=="object") rec.meals = {};
+    if(!rec.mealLogs || typeof rec.mealLogs!=="object") rec.mealLogs = {};
+    if(!rec.mealSubs || typeof rec.mealSubs!=="object") rec.mealSubs = {};
+    if(!rec.reminders || typeof rec.reminders!=="object") rec.reminders = {};
+    if(!rec.body || typeof rec.body!=="object") rec.body = {};
+    fitnessData[key] = rec;
+    return rec;
+  }
+  function ensureFitnessShape(raw){
+    var rec = clone(raw) || {};
+    if(!rec.exercises) rec.exercises = {};
+    if(!rec.exDetails) rec.exDetails = {};
+    if(!rec.workoutDay) rec.workoutDay = "day1";
+    if(!rec.meals) rec.meals = {};
+    if(!rec.mealLogs) rec.mealLogs = {};
+    if(!rec.mealSubs) rec.mealSubs = {};
+    if(!rec.reminders) rec.reminders = {};
+    if(!rec.body) rec.body = {};
+    return rec;
+  }
+  function syncFitnessIntoDay(key){
+    var day = ensureDay(key);
+    day.fitness = fitnessData[key] ? clone(fitnessData[key]) : null;
+    persistDays();
+    return day;
+  }
+  function persistFitnessAndDay(){
+    saveObject(FITNESS_STORE_KEY, fitnessData);
+    syncFitnessIntoDay(currentDate);
+  }
+  function getCurrentDay(){
+    ensureFitnessRec(currentDate);
+    return syncFitnessIntoDay(currentDate);
+  }
+
+  function fillEntryTags(){
+    $("#entryTag").innerHTML = ENTRY_TAGS.map(function(tag){return '<option value="'+esc(tag)+'">'+esc(tag)+'</option>';}).join("");
+    $("#workoutDaySelect").innerHTML = Object.keys(WORKOUTS).map(function(k){
+      return '<option value="'+k+'">'+esc(WORKOUTS[k].label)+'</option>';
+    }).join("");
+  }
+  function formatDateLabel(key){
+    var today = dateKey(new Date());
+    if(key===today) return "今天 · "+key;
+    if(key===shiftDate(today, -1)) return "昨天 · "+key;
+    return key;
+  }
+  function renderDateTools(){
+    $("#dayDateInput").value = currentDate;
+    var keys = {};
+    keys[currentDate] = true;
+    keys[dateKey(new Date())] = true;
+    Object.keys(days).forEach(function(k){keys[k]=true;});
+    Object.keys(fitnessData).forEach(function(k){keys[k]=true;});
+    $("#dayQuickSelect").innerHTML = Object.keys(keys).sort().reverse().map(function(k){
+      return '<option value="'+k+'" '+(k===currentDate?'selected':'')+'>'+esc(formatDateLabel(k))+'</option>';
+    }).join("");
+  }
+  function setDate(key){
+    currentDate = key;
+    editingEntryId = null;
+    resetEntryForm();
+    renderAll();
+  }
+
+  function resetEntryForm(){
+    $("#entryTime").value = nowTime();
+    $("#entryTag").value = ENTRY_TAGS[0];
+    $("#entryDomain").value = "";
+    $("#entryText").value = "";
+    $("#entryCancelBtn").hidden = true;
+    $("#entrySaveBtn").textContent = "存入今日";
+  }
+  function renderEntries(day){
+    $("#entryCountText").textContent = day.entries.length+" 条";
+    if(!day.entries.length){
+      $("#entryList").innerHTML = '<div class="empty"><h3>今天还没有记录</h3><p>先记原始事件，不急着总结。</p></div>';
+      return;
+    }
+    var list = day.entries.slice().sort(function(a,b){return a.time.localeCompare(b.time);});
+    $("#entryList").innerHTML = list.map(function(e){
+      return '<div class="entry-item" data-entry-id="'+esc(e.id)+'">'+
+        '<div class="entry-item__time">'+esc(e.time)+'</div>'+
+        '<div class="entry-item__body"><div class="entry-item__meta">'+
+          '<span class="chip chip--domain">'+esc(e.tag)+'</span>'+
+          (e.domain?'<span class="chip chip--type">'+esc(e.domain)+'</span>':'')+
+        '</div><p class="entry-item__text">'+esc(e.text)+'</p></div>'+
+        '<div class="entry-item__actions">'+
+          '<button class="tiny-btn" data-edit-entry="'+esc(e.id)+'">编辑</button>'+
+          '<button class="tiny-btn" data-delete-entry="'+esc(e.id)+'">删除</button>'+
+        '</div></div>';
+    }).join("");
+  }
+  function saveEntry(){
+    var text = $("#entryText").value.trim();
+    if(!text){ $("#entryText").focus(); return; }
+    var day = ensureDay(currentDate);
+    var entry = normalizeEntry({
+      id:editingEntryId || nextEntryId(),
+      time:$("#entryTime").value || nowTime(),
+      text:text,
+      tag:$("#entryTag").value,
+      domain:$("#entryDomain").value.trim(),
+      linkedCardId:""
+    });
+    if(editingEntryId){
+      day.entries = day.entries.map(function(e){return e.id===editingEntryId ? entry : e;});
+    }else{
+      day.entries.push(entry);
+    }
+    day.entries = day.entries.filter(Boolean).sort(function(a,b){return a.time.localeCompare(b.time);});
+    days[currentDate] = day;
+    persistDays();
+    editingEntryId = null;
+    resetEntryForm();
+    renderAll();
+  }
+  function editEntry(id){
+    var day = ensureDay(currentDate);
+    var entry = day.entries.find(function(e){return e.id===id;});
+    if(!entry) return;
+    editingEntryId = id;
+    $("#entryTime").value = entry.time;
+    $("#entryTag").value = entry.tag;
+    $("#entryDomain").value = entry.domain || "";
+    $("#entryText").value = entry.text;
+    $("#entryCancelBtn").hidden = false;
+    $("#entrySaveBtn").textContent = "保存修改";
+    $("#entryText").focus();
+  }
+  function deleteEntry(id){
+    if(!confirm("删除这条记录？")) return;
+    var day = ensureDay(currentDate);
+    day.entries = day.entries.filter(function(e){return e.id!==id;});
+    persistDays();
+    if(editingEntryId===id){ editingEntryId = null; resetEntryForm(); }
+    renderAll();
+  }
+
+  function workoutStats(rec){
+    var key = rec.workoutDay || "day1";
+    if(key==="rest") return {done:0,total:0,pct:100,label:"休息"};
+    var wo = WORKOUTS[key] || WORKOUTS.day1;
+    var total = wo.exercises.length + (wo.cardio ? 1 : 0);
+    var done = 0;
+    wo.exercises.forEach(function(_, i){ if(rec.exercises[key+"_"+i]) done++; });
+    if(wo.cardio && rec.exercises[key+"_cardio"]) done++;
+    return {done:done,total:total,pct:total ? Math.round(done/total*100) : 0,label:done+"/"+total};
+  }
+  function mealStats(rec){
+    var done = 0, p = 0, c = 0, f = 0;
+    MEALS.forEach(function(meal){
+      if(rec.meals[meal.id]){ done++; p+=meal.p; c+=meal.c; f+=meal.f; }
+    });
+    return {done:done,total:MEALS.length,p:p,c:c,f:f};
+  }
+  function renderFitnessSummary(rec){
+    var w = workoutStats(rec), m = mealStats(rec);
+    var bodyCount = ["weight","bodyfat","bench","row"].filter(function(k){return rec.body[k]!=null && rec.body[k]!=="";}).length;
+    $("#fitnessSummary").innerHTML =
+      '<div class="fitness-stat"><b>'+esc(w.label)+'</b><span>训练</span></div>'+
+      '<div class="fitness-stat"><b>'+m.done+'/'+m.total+'</b><span>餐次</span></div>'+
+      '<div class="fitness-stat"><b>'+(rec.reminders.water?"已":"未")+'</b><span>饮水</span></div>'+
+      '<div class="fitness-stat"><b>'+bodyCount+'</b><span>身体指标</span></div>';
+  }
+  function valueOrDefault(detail, field, fallback){
+    return detail && detail[field]!=null ? detail[field] : fallback;
+  }
+  function renderWorkout(rec){
+    var day = rec.workoutDay || "day1";
+    $("#workoutDaySelect").value = day;
+    if(day==="rest"){
+      $("#workoutList").innerHTML = '<div class="empty"><h3>休息日</h3><p>恢复也计入今日循环。</p></div>';
+      return;
+    }
+    var wo = WORKOUTS[day] || WORKOUTS.day1;
+    var html = wo.exercises.map(function(ex, i){
+      var key = day+"_"+i;
+      var done = !!rec.exercises[key];
+      var detail = rec.exDetails[key] || {};
+      var sets = valueOrDefault(detail, "sets", ex.defaultSets);
+      var reps = valueOrDefault(detail, "reps", ex.defaultReps);
+      var weight = valueOrDefault(detail, "weight", ex.defaultWeight);
+      var label = sets+"组 × "+reps+"次 · "+(weight===0 ? "自重" : (weight!=null ? weight+"kg" : "--"));
+      return '<div class="fit-row">'+
+        '<button class="fit-check '+(done?'done':'')+'" data-toggle-ex="'+esc(key)+'" aria-label="切换完成">'+(done?'✓':'')+'</button>'+
+        '<div><div class="fit-name">'+esc(ex.name)+'</div><div class="fit-detail">'+esc(label)+' · '+esc(ex.tag)+'</div></div>'+
+        '<button class="tiny-btn" data-edit-fit="'+esc(key)+'">'+(detail._open?'收起':'编辑')+'</button>'+
+        '<div class="fit-edit '+(detail._open?'open':'')+'">'+
+          '<input class="today__input" data-fit-key="'+esc(key)+'" data-fit-field="sets" type="number" min="1" placeholder="组数" value="'+esc(sets)+'">'+
+          '<input class="today__input" data-fit-key="'+esc(key)+'" data-fit-field="reps" type="number" min="1" placeholder="次数" value="'+esc(reps)+'">'+
+          '<input class="today__input" data-fit-key="'+esc(key)+'" data-fit-field="weight" type="number" step="2.5" min="0" placeholder="重量" value="'+esc(weight==null?'':weight)+'">'+
+          '<textarea class="today__textarea" data-fit-key="'+esc(key)+'" data-fit-field="note" placeholder="备注">'+esc(detail.note||"")+'</textarea>'+
+        '</div></div>';
+    }).join("");
+    if(wo.cardio){
+      var ckey = day+"_cardio";
+      var cDone = !!rec.exercises[ckey];
+      var cDetail = rec.exDetails[ckey] || {};
+      html += '<div class="fit-row">'+
+        '<button class="fit-check '+(cDone?'done':'')+'" data-toggle-ex="'+esc(ckey)+'" aria-label="切换完成">'+(cDone?'✓':'')+'</button>'+
+        '<div><div class="fit-name">斜坡快走</div><div class="fit-detail">坡度'+esc(valueOrDefault(cDetail,"slope",10))+
+          ' · '+esc(valueOrDefault(cDetail,"speed",5))+'km/h · '+esc(valueOrDefault(cDetail,"duration",25))+'分钟</div></div>'+
+        '<button class="tiny-btn" data-edit-fit="'+esc(ckey)+'">'+(cDetail._open?'收起':'编辑')+'</button>'+
+        '<div class="fit-edit '+(cDetail._open?'open':'')+'">'+
+          '<input class="today__input" data-fit-key="'+esc(ckey)+'" data-fit-field="duration" type="number" min="1" placeholder="时长" value="'+esc(valueOrDefault(cDetail,"duration",25))+'">'+
+          '<input class="today__input" data-fit-key="'+esc(ckey)+'" data-fit-field="slope" type="number" min="0" placeholder="坡度" value="'+esc(valueOrDefault(cDetail,"slope",10))+'">'+
+          '<input class="today__input" data-fit-key="'+esc(ckey)+'" data-fit-field="speed" type="number" min="0" step="0.5" placeholder="速度" value="'+esc(valueOrDefault(cDetail,"speed",5))+'">'+
+          '<textarea class="today__textarea" data-fit-key="'+esc(ckey)+'" data-fit-field="note" placeholder="备注">'+esc(cDetail.note||"")+'</textarea>'+
+        '</div></div>';
+    }
+    $("#workoutList").innerHTML = html;
+  }
+  function renderMeals(rec){
+    $("#mealList").innerHTML = MEALS.map(function(meal){
+      var done = !!rec.meals[meal.id];
+      return '<div class="meal-row">'+
+        '<button class="fit-check '+(done?'done':'')+'" data-toggle-meal="'+meal.id+'" aria-label="切换餐次">'+(done?'✓':'')+'</button>'+
+        '<div><div class="fit-name">'+esc(meal.title)+'</div><div class="fit-detail">'+esc(meal.cal)+' · '+esc(meal.macros)+'</div></div>'+
+        '<button class="tiny-btn" data-toggle-meal="'+meal.id+'">'+(done?'已打卡':'打卡')+'</button>'+
+        '<textarea class="today__textarea meal-log" data-meal-log="'+meal.id+'" placeholder="实际吃了什么、分量偏差">'+esc(rec.mealLogs[meal.id]||"")+'</textarea>'+
+      '</div>';
+    }).join("");
+    $("#reminderList").innerHTML =
+      '<button class="tiny-btn" data-reminder="water">饮水 '+(rec.reminders.water?'已完成':'未完成')+'</button>'+
+      '<button class="tiny-btn" data-reminder="nosugar">无糖饮料 '+(rec.reminders.nosugar?'已完成':'未完成')+'</button>';
+  }
+  function renderBody(rec){
+    var fields = [
+      ["weight","体重 kg"],
+      ["bodyfat","体脂 %"],
+      ["bench","卧推 kg"],
+      ["row","划船 kg"]
+    ];
+    $("#bodyFields").innerHTML = fields.map(function(f){
+      var v = rec.body[f[0]];
+      return '<input class="today__input" data-body-field="'+f[0]+'" type="number" step="0.1" placeholder="'+esc(f[1])+'" value="'+esc(v==null?'':v)+'">';
+    }).join("") + '<textarea class="today__textarea" data-body-field="notes" placeholder="睡眠、状态、饮食偏差">'+esc(rec.body.notes||"")+'</textarea>';
+  }
+  function renderFitness(){
+    var rec = ensureFitnessRec(currentDate);
+    renderFitnessSummary(rec);
+    renderWorkout(rec);
+    renderMeals(rec);
+    renderBody(rec);
+    syncFitnessIntoDay(currentDate);
+  }
+  function ensureDetail(rec, key){
+    if(!rec.exDetails[key] || typeof rec.exDetails[key]!=="object") rec.exDetails[key] = {};
+    return rec.exDetails[key];
+  }
+  function setFitnessNumber(obj, field, value){
+    if(value===""){ delete obj[field]; return; }
+    var num = Number(value);
+    if(isFinite(num)) obj[field] = num;
+  }
+
+  function renderReview(day){
+    var review = day.review;
+    if(!review){
+      $("#reviewOutput").innerHTML = '<div class="empty"><h3>还没有复盘</h3><p>先记录，再生成 mock review。</p></div>';
+      return;
+    }
+    var dims = review.score && review.score.dims ? review.score.dims : {};
+    var advice = Array.isArray(review.advice) ? review.advice : [];
+    $("#reviewOutput").innerHTML =
+      '<div class="review-score"><div class="score-badge">'+esc(review.score && review.score.overall ? review.score.overall : "-")+'</div>'+
+      '<p class="review-summary">'+esc(review.summary||"")+'</p></div>'+
+      '<ul class="review-list">'+Object.keys(dims).map(function(k){return '<li>'+esc(k)+'：'+esc(dims[k])+'/10</li>';}).join("")+'</ul>'+
+      '<ul class="review-list">'+advice.map(function(a){return '<li>'+esc(a)+'</li>';}).join("")+'</ul>'+
+      '<p class="local-note">生成时间：'+esc(review.generatedAt||"")+' · promotedCardIds：'+esc((review.promotedCardIds||[]).join(", ") || "本期不提炼卡片")+'</p>';
+  }
+  function buildMockReview(day){
+    var rec = ensureFitnessShape(day.fitness || {});
+    var entries = Array.isArray(day.entries) ? day.entries : [];
+    var w = workoutStats(rec);
+    var m = mealStats(rec);
+    var entryScore = Math.min(10, Math.max(4, 5 + entries.length));
+    var fitnessScore = w.total ? Math.max(4, Math.round((w.done / w.total) * 10)) : (rec.workoutDay==="rest" ? 8 : 5);
+    var dietScore = Math.max(4, Math.round((m.done / 4) * 10));
+    var overall = Math.round(entryScore*0.35 + fitnessScore*0.35 + dietScore*0.30);
+    var tags = {};
+    entries.forEach(function(e){ tags[e.tag] = (tags[e.tag]||0)+1; });
+    var topTag = Object.keys(tags).sort(function(a,b){return tags[b]-tags[a];})[0] || "记录";
+    var advice = [
+      entries.length ? "从今天的记录看，"+topTag+"是主要线索；明天可以继续围绕它留一个可执行动作。" : "先补一条原始记录就够，复盘质量会跟着变清楚。",
+      w.total && w.done<w.total ? "训练还差一点收尾，把缺口具体化成下一次开练前的第一步。" : "健身记录已经进入日循环，继续看连续趋势，不用被单日波动带走。",
+      m.done<4 ? "饮食不需要苛责，优先把蛋白和饮水这两个基本盘补稳。" : "饮食结构今天比较完整，后续重点观察恢复和睡眠。"
+    ];
+    return {
+      summary:"mock 复盘：今天留下 "+entries.length+" 条记录，训练完成 "+(w.total?w.done+"/"+w.total:"休息/未排")+"，餐次完成 "+m.done+"/4。这个分数只用于看趋势，帮你找到下一步，不给自己判刑。",
+      score:{overall:Math.max(1, Math.min(10, overall)), dims:{专注:entryScore, 执行:Math.max(entryScore, fitnessScore), 健身:fitnessScore, 饮食:dietScore}},
+      advice:advice.slice(0,3),
+      promotedCardIds:[],
+      generatedAt:new Date().toISOString()
+    };
+  }
+  function requestReview(day){
+    var endpoint = ($("#reviewEndpoint").value || "mock://daily-review").trim();
+    if(!endpoint || endpoint==="mock" || endpoint.indexOf("mock://")===0){
+      return Promise.resolve(buildMockReview(day));
+    }
+    return fetch(endpoint, {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({day:day})
+    }).then(function(resp){
+      if(!resp.ok) throw new Error("review endpoint failed: "+resp.status);
+      return resp.json();
+    }).then(function(review){
+      if(!review || typeof review!=="object" || !review.summary || !review.score) throw new Error("review payload invalid");
+      return review;
+    });
+  }
+  window.requestReview = requestReview;
+  window.__dailyLoop = {requestReview:requestReview, getDay:function(){return getCurrentDay();}};
+  window.__brain.openDailyReview = function(){
+    document.getElementById("reviewPanel").scrollIntoView({behavior:"smooth", block:"start"});
+    document.getElementById("reviewBtn").focus();
+  };
+
+  function renderAll(){
+    var day = getCurrentDay();
+    renderDateTools();
+    renderEntries(day);
+    renderFitness();
+    renderReview(day);
+  }
+  function downloadLocalDays(){
+    syncFitnessIntoDay(currentDate);
+    var blob = new Blob([JSON.stringify(days, null, 2)], {type:"application/json"});
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "brain-two-days.local.json";
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }
+
+  fillEntryTags();
+  $("#reviewEndpoint").value = readSetting(ENDPOINT_STORE_KEY, "mock://daily-review");
+  resetEntryForm();
+  $("#prevDayBtn").addEventListener("click", function(){setDate(shiftDate(currentDate, -1));});
+  $("#nextDayBtn").addEventListener("click", function(){setDate(shiftDate(currentDate, 1));});
+  $("#dayDateInput").addEventListener("change", function(e){if(e.target.value) setDate(e.target.value);});
+  $("#dayQuickSelect").addEventListener("change", function(e){if(e.target.value) setDate(e.target.value);});
+  $("#entrySaveBtn").addEventListener("click", saveEntry);
+  $("#entryCancelBtn").addEventListener("click", function(){editingEntryId=null; resetEntryForm();});
+  $("#exportDaysBtn").addEventListener("click", downloadLocalDays);
+  $("#fitnessSyncBtn").addEventListener("click", function(){persistFitnessAndDay(); renderAll();});
+  $("#saveEndpointBtn").addEventListener("click", function(){
+    var ok = writeSetting(ENDPOINT_STORE_KEY, $("#reviewEndpoint").value.trim() || "mock://daily-review");
+    $("#reviewStatus").textContent = ok ? "endpoint 已保存在本机。" : "浏览器没有允许保存 endpoint，本次仍可使用。";
+  });
+  $("#reviewBtn").addEventListener("click", function(){
+    var btn = $("#reviewBtn");
+    var day = getCurrentDay();
+    btn.disabled = true;
+    $("#reviewStatus").textContent = "正在生成复盘...";
+    requestReview(day).then(function(review){
+      day.review = review;
+      days[currentDate] = day;
+      persistDays();
+      renderReview(day);
+      $("#reviewStatus").textContent = "复盘已保存到本机 day.review。";
+    }).catch(function(err){
+      $("#reviewStatus").textContent = "复盘失败："+(err && err.message ? err.message : "endpoint 无响应");
+    }).finally(function(){ btn.disabled = false; });
+  });
+  $("#entryList").addEventListener("click", function(e){
+    var edit = e.target.closest("[data-edit-entry]");
+    var del = e.target.closest("[data-delete-entry]");
+    if(edit) editEntry(edit.getAttribute("data-edit-entry"));
+    if(del) deleteEntry(del.getAttribute("data-delete-entry"));
+  });
+  $("#workoutDaySelect").addEventListener("change", function(e){
+    var rec = ensureFitnessRec(currentDate);
+    rec.workoutDay = e.target.value;
+    persistFitnessAndDay();
+    renderAll();
+  });
+  $("#workoutList").addEventListener("click", function(e){
+    var toggle = e.target.closest("[data-toggle-ex]");
+    var edit = e.target.closest("[data-edit-fit]");
+    var rec = ensureFitnessRec(currentDate);
+    if(toggle){
+      var key = toggle.getAttribute("data-toggle-ex");
+      rec.exercises[key] = !rec.exercises[key];
+      persistFitnessAndDay();
+      renderAll();
+    }
+    if(edit){
+      var ekey = edit.getAttribute("data-edit-fit");
+      var detail = ensureDetail(rec, ekey);
+      detail._open = !detail._open;
+      persistFitnessAndDay();
+      renderAll();
+    }
+  });
+  $("#workoutList").addEventListener("input", function(e){
+    var input = e.target.closest("[data-fit-key]");
+    if(!input) return;
+    var rec = ensureFitnessRec(currentDate);
+    var detail = ensureDetail(rec, input.getAttribute("data-fit-key"));
+    var field = input.getAttribute("data-fit-field");
+    if(field==="note") detail[field] = input.value;
+    else setFitnessNumber(detail, field, input.value);
+    detail._open = true;
+    persistFitnessAndDay();
+    renderFitnessSummary(rec);
+  });
+  $("#mealList").addEventListener("click", function(e){
+    var toggle = e.target.closest("[data-toggle-meal]");
+    if(!toggle) return;
+    var rec = ensureFitnessRec(currentDate);
+    var id = toggle.getAttribute("data-toggle-meal");
+    rec.meals[id] = !rec.meals[id];
+    persistFitnessAndDay();
+    renderAll();
+  });
+  $("#mealList").addEventListener("input", function(e){
+    var log = e.target.closest("[data-meal-log]");
+    if(!log) return;
+    var rec = ensureFitnessRec(currentDate);
+    rec.mealLogs[log.getAttribute("data-meal-log")] = log.value;
+    persistFitnessAndDay();
+    renderFitnessSummary(rec);
+  });
+  $("#reminderList").addEventListener("click", function(e){
+    var btn = e.target.closest("[data-reminder]");
+    if(!btn) return;
+    var rec = ensureFitnessRec(currentDate);
+    var key = btn.getAttribute("data-reminder");
+    rec.reminders[key] = !rec.reminders[key];
+    persistFitnessAndDay();
+    renderAll();
+  });
+  $("#bodyFields").addEventListener("input", function(e){
+    var field = e.target.closest("[data-body-field]");
+    if(!field) return;
+    var rec = ensureFitnessRec(currentDate);
+    var key = field.getAttribute("data-body-field");
+    if(key==="notes") rec.body.notes = field.value;
+    else setFitnessNumber(rec.body, key, field.value);
+    persistFitnessAndDay();
+    renderFitnessSummary(rec);
+  });
+
+  renderAll();
+})();
+
 /* ---------- 3D brain ---------- */
 window.addEventListener("load", function(){
   var stage = document.getElementById("stage");
@@ -787,8 +1524,8 @@ window.addEventListener("load", function(){
       {name:"录入",   tag:"已上线",          live:true,  action:"capture", dir:[ 0.88, 0.06, 0.46]},
       {name:"存储",   tag:"已上线",          live:true,  action:"grid",    dir:[ 0.52, 0.50, 0.18]},
       {name:"检索",   tag:"已上线",          live:true,  action:"search",  dir:[ 0.30, 0.66,-0.38]},
-      {name:"蒸馏",   tag:"待 API · Phase 2", live:false, action:null,      dir:[-0.58, 0.40, 0.34]},
-      {name:"推理建议",tag:"待 API · Phase 2", live:false, action:null,      dir:[-0.74,-0.06,-0.32]},
+      {name:"蒸馏",   tag:"待卡片提炼 · P2.4", live:false, action:null,      dir:[-0.58, 0.40, 0.34]},
+      {name:"推理建议",tag:"接口+mock · P2.2", live:true,  action:"review",  dir:[-0.74,-0.06,-0.32]},
       {name:"主动推送",tag:"待 n8n · Phase 3", live:false, action:null,      dir:[-0.34,-0.50, 0.30]}
     ];
 
@@ -905,6 +1642,7 @@ window.addEventListener("load", function(){
           if(nd.action==="capture") window.__brain.openCapture();
           else if(nd.action==="search"){var el=document.getElementById("search"); el.scrollIntoView({behavior:"smooth",block:"center"}); el.focus();}
           else if(nd.action==="grid"){document.getElementById("grid").scrollIntoView({behavior:"smooth",block:"start"});}
+          else if(nd.action==="review" && window.__brain.openDailyReview){window.__brain.openDailyReview();}
         }
       }
     }
