@@ -10,19 +10,25 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#15171E; --surface:#1C1F27; --surface-2:#232733; --line:#2E323D;
-    --text:#E7E4DB; --muted:#8B909C; --faint:#5A6070;
-    --live:#F0B45E; --live-glow:rgba(240,180,94,.22);
-    --personal:#CE8C7F; --dormant:#565E6E;
+    --bg:#080D13; --surface:#111922; --surface-2:#172331; --line:#263646;
+    --text:#EDF4F3; --muted:#94A6AD; --faint:#5E707A;
+    --live:#7AE7D8; --live-glow:rgba(122,231,216,.24);
+    --accent:#F0B45E; --personal:#E995A4; --dormant:#536572;
     --display:'Space Grotesk',sans-serif;
     --body:'Inter','PingFang SC','Microsoft YaHei','Noto Sans SC',system-ui,sans-serif;
     --mono:'Space Mono','SF Mono',ui-monospace,monospace;
   }
   *{box-sizing:border-box}
   html,body{margin:0}
-  body{background:var(--bg); color:var(--text); font-family:var(--body); font-size:15px;
-    line-height:1.55; -webkit-font-smoothing:antialiased; padding:0 0 64px}
-  .wrap{max-width:1060px; margin:0 auto; padding:0 22px}
+  body{position:relative; min-height:100vh; overflow-x:hidden; background:var(--bg); color:var(--text);
+    font-family:var(--body); font-size:15px; line-height:1.55; -webkit-font-smoothing:antialiased; padding:0 0 64px;
+    isolation:isolate}
+  body::before{content:""; position:fixed; inset:0; z-index:1; pointer-events:none;
+    background:radial-gradient(1000px 680px at 72% 6%, rgba(122,231,216,.12), transparent 58%),
+      radial-gradient(820px 520px at 10% 28%, rgba(240,180,94,.10), transparent 58%),
+      linear-gradient(180deg, rgba(8,13,19,.36), rgba(8,13,19,.86) 72%, #080D13)}
+  #flowField{position:fixed; inset:0; width:100%; height:100%; z-index:0; pointer-events:none; display:block}
+  .wrap{position:relative; z-index:2; max-width:1120px; margin:0 auto; padding:0 22px}
 
   .app-head{display:flex; align-items:center; justify-content:space-between; gap:16px;
     padding:24px 0 14px; flex-wrap:wrap}
@@ -32,16 +38,23 @@
   .mark .v{font-family:var(--mono); font-size:11px; color:var(--faint); font-weight:400;
     border:1px solid var(--line); border-radius:5px; padding:1px 6px; letter-spacing:.5px}
 
-  .hero{position:relative; border:1px solid var(--line); border-radius:16px;
-    background:radial-gradient(120% 130% at 74% 46%, rgba(240,180,94,.08), transparent 58%), var(--surface);
-    padding:14px 18px 10px; overflow:hidden}
+  .hero{position:relative; display:grid; grid-template-columns:minmax(260px,.86fr) minmax(360px,1.14fr);
+    align-items:center; gap:18px; min-height:560px; padding:24px 0 8px; overflow:visible}
+  .hero::after{content:""; position:absolute; left:50%; bottom:8px; width:78vw; max-width:980px; height:1px;
+    transform:translateX(-50%); background:linear-gradient(90deg, transparent, rgba(122,231,216,.36), transparent)}
+  .hero__copy{grid-column:1; grid-row:1; min-width:0; padding:20px 0 16px}
   .hero__eyebrow{font-family:var(--mono); font-size:10.5px; letter-spacing:1.6px;
-    text-transform:uppercase; color:var(--faint); margin:6px 4px 4px}
-  .brain-stage{position:relative; width:100%; max-width:600px; height:340px; margin:0 auto}
+    text-transform:uppercase; color:var(--live); margin:0 0 10px}
+  .hero__title{font-family:var(--display); font-size:clamp(38px,7vw,74px); line-height:.93; margin:0;
+    letter-spacing:0; max-width:620px; text-wrap:balance}
+  .hero__lede{font-size:14px; color:#B8C7C9; max-width:520px; margin:16px 0 0}
+  .brain-shell{grid-column:2; grid-row:1 / span 2; position:relative; min-width:0}
+  .brain-stage{position:relative; width:100%; max-width:720px; height:470px; margin:0 auto}
   .brain-stage canvas{display:block; width:100%; height:100%; touch-action:none; cursor:grab}
   .brain-stage canvas.grabbing{cursor:grabbing}
   .brain-stage .fallback{position:absolute; inset:0; display:flex; align-items:center;
     justify-content:center; text-align:center; color:var(--muted); font-size:13px; padding:20px}
+  .brain-stage .fallback[hidden]{display:none}
 
   .brain-tip{position:absolute; pointer-events:none; opacity:0; transform:translate(-50%,-115%);
     background:#0F1116; border:1px solid var(--line); border-radius:8px; padding:7px 10px;
@@ -53,13 +66,46 @@
   .brain-tip .st--live{color:var(--live)} .brain-tip .st--off{color:var(--faint)}
 
   .hero__bar{display:flex; align-items:center; justify-content:center; gap:18px; flex-wrap:wrap;
-    padding:6px 4px 8px; font-family:var(--mono); font-size:11px; color:var(--muted)}
+    padding:2px 4px 8px; font-family:var(--mono); font-size:11px; color:var(--muted)}
   .leg{display:inline-flex; align-items:center; gap:6px}
   .leg i{width:8px; height:8px; border-radius:50%; display:inline-block}
   .leg--live i{background:var(--live); box-shadow:0 0 6px var(--live-glow)}
   .leg--off i{background:#262a34; border:1px solid var(--dormant)}
   .hero__status b{color:var(--live)}
   .hero__hint{color:var(--faint)}
+
+  .domain-dock{grid-column:1; grid-row:2; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px; max-width:520px; margin-top:8px}
+  .domain-chip-btn{min-width:0; display:grid; grid-template-columns:1fr auto; align-items:center; gap:8px;
+    background:rgba(17,25,34,.68); border:1px solid rgba(122,231,216,.18); color:var(--text); border-radius:10px;
+    padding:10px 11px; cursor:pointer; text-align:left; backdrop-filter:blur(10px);
+    transition:transform .16s ease, border-color .16s ease, background .16s ease}
+  .domain-chip-btn:hover{transform:translateY(-2px); border-color:rgba(122,231,216,.58); background:rgba(24,39,52,.82)}
+  .domain-chip-btn.personal{border-color:rgba(233,149,164,.24)}
+  .domain-chip-btn.personal:hover{border-color:rgba(233,149,164,.62)}
+  .domain-chip-btn b{grid-column:1/-1; font-family:var(--display); font-size:14px; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+  .domain-chip-btn span{font-family:var(--mono); font-size:10px; color:var(--faint)}
+  .domain-chip-btn em{font-family:var(--mono); font-style:normal; font-size:11px; color:var(--live)}
+  .domain-chip-btn.personal em{color:var(--personal)}
+
+  .domain-focus{position:relative; margin:18px 0 24px; border:1px solid rgba(122,231,216,.24); border-radius:16px;
+    background:linear-gradient(180deg, rgba(12,20,28,.84), rgba(14,20,27,.96)); padding:18px;
+    box-shadow:0 30px 90px -70px rgba(122,231,216,.55)}
+  .domain-focus[hidden]{display:none}
+  .domain-focus::before{content:""; position:absolute; inset:0; border-radius:16px; pointer-events:none;
+    background:linear-gradient(130deg, rgba(122,231,216,.12), transparent 36%, rgba(240,180,94,.08))}
+  .domain-focus__head{position:relative; display:flex; align-items:flex-start; justify-content:space-between; gap:14px; margin-bottom:14px}
+  .domain-focus__kicker{font-family:var(--mono); font-size:10.5px; letter-spacing:1.4px; text-transform:uppercase; color:var(--faint); margin:0 0 5px}
+  .domain-focus__title{font-family:var(--display); font-weight:500; font-size:23px; line-height:1.15; margin:0}
+  .domain-focus__meta{font-size:12px; color:var(--muted); margin:7px 0 0}
+  .domain-focus__actions{display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end}
+  .domain-focus__grid{position:relative; display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:12px}
+  .domain-node-card{min-width:0; border:1px solid rgba(122,231,216,.18); border-radius:10px; background:rgba(8,13,19,.42);
+    padding:13px; cursor:pointer; transition:transform .16s ease, border-color .16s ease, background .16s ease}
+  .domain-node-card:hover{transform:translateY(-2px); border-color:rgba(122,231,216,.55); background:rgba(19,31,41,.72)}
+  .domain-node-card h3{font-family:var(--display); font-weight:500; font-size:15.5px; line-height:1.25; margin:8px 0 6px}
+  .domain-node-card p{font-size:12.5px; color:#BFD0D0; margin:0; overflow-wrap:anywhere}
+  .domain-node-card__meta{display:flex; justify-content:space-between; gap:10px; font-family:var(--mono); font-size:10px; color:var(--faint)}
+  .domain-empty{position:relative; border:1px dashed var(--line); border-radius:12px; padding:22px; color:var(--muted); text-align:center}
 
   .bar{display:flex; align-items:center; gap:14px; flex-wrap:wrap;
     margin:26px 0 16px; padding-bottom:16px; border-bottom:1px solid var(--line)}
@@ -259,11 +305,23 @@
   @keyframes cmdIn{to{opacity:1; transform:translateX(-50%) translateY(0)}}
 
   @media (max-width:560px){
+    .wrap{padding:0 16px}
+    .app-head{padding-top:18px}
+    .hero{grid-template-columns:1fr; min-height:auto; gap:0; padding-top:10px}
+    .hero__copy{grid-column:1; grid-row:auto; order:1; padding:12px 0 10px}
+    .brain-shell{grid-column:1; grid-row:auto; order:2}
+    .hero__title{font-size:44px; line-height:.96}
+    .hero__lede{font-size:13px; margin-top:12px}
+    .domain-dock{grid-column:1; grid-row:auto; order:3; grid-template-columns:1fr; margin-top:16px}
+    .domain-focus{padding:14px}
+    .domain-focus__head{display:grid}
+    .domain-focus__actions{justify-content:flex-start}
+    .domain-focus__grid{grid-template-columns:1fr}
     .grid{grid-template-columns:1fr}
     .grid.is-list .card{display:flex}
     .search{order:3; flex-basis:100%}
     .view-toggle{order:4}
-    .brain-stage{height:260px}
+    .brain-stage{height:320px}
     .hero__bar{gap:12px}
     .drawer__panel{padding:20px}
     .drawer__grid{grid-template-columns:1fr}
@@ -281,6 +339,7 @@
 </style>
 </head>
 <body>
+<canvas id="flowField" aria-hidden="true"></canvas>
 <div class="wrap">
 
   <header class="app-head">
@@ -292,17 +351,39 @@
   </header>
 
   <section class="hero">
-    <p class="hero__eyebrow">第二个大脑 · 现在是一具身体，智能分阶段点亮</p>
-    <div class="brain-stage" id="stage">
-      <div class="fallback" id="fallback" hidden>3D 大脑需要 WebGL。换支持 WebGL 的浏览器即可看到立体版。</div>
+    <div class="hero__copy">
+      <p class="hero__eyebrow">第二个大脑 · 流动知识图谱</p>
+      <h1 class="hero__title">brain two</h1>
+      <p class="hero__lede">卡片沉进大脑里的领域点；打开一个点，就展开对应知识库。今日循环仍然只在本机保存。</p>
     </div>
-    <div class="brain-tip" id="tip"></div>
-    <div class="hero__bar">
-      <span class="hero__status"><b>4</b> / 6 模块在线 · 今日循环 mock</span>
-      <span class="leg leg--live"><i></i>已上线</span>
-      <span class="leg leg--off"><i></i>待激活</span>
-      <span class="hero__hint">· 拖动旋转</span>
+    <div class="domain-dock" id="domainDock" aria-label="领域知识库"></div>
+    <div class="brain-shell">
+      <div class="brain-stage" id="stage">
+        <div class="fallback" id="fallback" hidden>3D 大脑需要 WebGL。换支持 WebGL 的浏览器即可看到立体版。</div>
+      </div>
+      <div class="brain-tip" id="tip"></div>
+      <div class="hero__bar">
+        <span class="hero__status"><b>4</b> / 6 模块在线 · 今日循环 mock</span>
+        <span class="leg leg--live"><i></i>已上线</span>
+        <span class="leg leg--off"><i></i>待激活</span>
+        <span class="hero__hint">· 拖动旋转</span>
+      </div>
     </div>
+  </section>
+
+  <section class="domain-focus" id="domainFocus" hidden aria-live="polite">
+    <div class="domain-focus__head">
+      <div>
+        <p class="domain-focus__kicker" id="domainFocusKicker">领域库</p>
+        <h2 class="domain-focus__title" id="domainFocusTitle">选择一个大脑节点</h2>
+        <p class="domain-focus__meta" id="domainFocusMeta"></p>
+      </div>
+      <div class="domain-focus__actions">
+        <button class="btn btn--ghost" id="domainFocusOpenAll">查看完整库</button>
+        <button class="btn icon-btn" id="domainFocusClose" aria-label="收起领域库">×</button>
+      </div>
+    </div>
+    <div class="domain-focus__grid" id="domainFocusGrid"></div>
   </section>
 
   <section class="today" id="todayLoop">
@@ -468,6 +549,105 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
+/* ---------- flowing page background ---------- */
+(function(){
+  "use strict";
+  var canvas = document.getElementById("flowField");
+  if(!canvas) return;
+  var ctx = canvas.getContext("2d", {alpha:true});
+  var reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var W = 0, H = 0, DPR = 1, lines = [], drops = [];
+
+  function resize(){
+    DPR = Math.min(window.devicePixelRatio || 1, 2);
+    W = window.innerWidth; H = window.innerHeight;
+    canvas.width = Math.max(1, Math.floor(W * DPR));
+    canvas.height = Math.max(1, Math.floor(H * DPR));
+    canvas.style.width = W + "px";
+    canvas.style.height = H + "px";
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    build();
+  }
+
+  function build(){
+    var lineCount = Math.max(18, Math.floor(W / 58));
+    var dropCount = Math.max(26, Math.floor((W * H) / 26000));
+    lines = [];
+    drops = [];
+    for(var i=0;i<lineCount;i++){
+      lines.push({
+        y:(H/(lineCount-1 || 1))*i + (Math.random()-.5)*32,
+        amp:18 + Math.random()*44,
+        drift:Math.random()*Math.PI*2,
+        speed:.18 + Math.random()*.42,
+        hue:Math.random()>.34 ? "cyan" : "gold",
+        width:.6 + Math.random()*1.3
+      });
+    }
+    for(var d=0;d<dropCount;d++){
+      drops.push({
+        x:Math.random()*W, y:Math.random()*H,
+        r:.8 + Math.random()*2.2,
+        speed:.25 + Math.random()*.9,
+        phase:Math.random()*Math.PI*2
+      });
+    }
+  }
+
+  function draw(t){
+    t *= .001;
+    ctx.clearRect(0,0,W,H);
+    var bg = ctx.createLinearGradient(0,0,W,H);
+    bg.addColorStop(0, "rgba(9,18,27,.42)");
+    bg.addColorStop(.48, "rgba(12,27,35,.18)");
+    bg.addColorStop(1, "rgba(8,13,19,.44)");
+    ctx.fillStyle = bg;
+    ctx.fillRect(0,0,W,H);
+
+    ctx.save();
+    ctx.globalCompositeOperation = "lighter";
+    lines.forEach(function(line, idx){
+      var grad = ctx.createLinearGradient(0, line.y-80, W, line.y+80);
+      if(line.hue === "cyan"){
+        grad.addColorStop(0, "rgba(122,231,216,0)");
+        grad.addColorStop(.45, "rgba(122,231,216,.14)");
+        grad.addColorStop(1, "rgba(122,231,216,0)");
+      } else {
+        grad.addColorStop(0, "rgba(240,180,94,0)");
+        grad.addColorStop(.48, "rgba(240,180,94,.12)");
+        grad.addColorStop(1, "rgba(240,180,94,0)");
+      }
+      ctx.beginPath();
+      var offset = t * 80 * line.speed + idx * 13;
+      for(var x=-80; x<=W+90; x+=18){
+        var y = line.y
+          + Math.sin((x+offset)*.010 + line.drift) * line.amp
+          + Math.sin((x-offset*.72)*.022 + line.drift*1.7) * line.amp*.34;
+        if(x===-80) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+      }
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = line.width;
+      ctx.stroke();
+    });
+
+    drops.forEach(function(p){
+      p.x += p.speed * (reduced ? 0 : 1);
+      p.y += Math.sin(t*.7 + p.phase) * .08;
+      if(p.x > W + 24){ p.x = -24; p.y = Math.random()*H; }
+      var alpha = .08 + .08*Math.sin(t*1.2 + p.phase);
+      ctx.fillStyle = "rgba(168,239,230,"+Math.max(.03, alpha)+")";
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.fill();
+    });
+    ctx.restore();
+
+    if(!reduced) requestAnimationFrame(draw);
+  }
+
+  window.addEventListener("resize", resize);
+  resize();
+  requestAnimationFrame(draw);
+})();
+
 /* ---------- card workspace (no 3D dependency) ---------- */
 (function(){
   "use strict";
@@ -563,6 +743,7 @@
   cards = storage.load();
 
   var state = {lib:"business", domain:"all", type:"all", q:"", view:"grid"};
+  var domainFocusState = null;
 
   function fillSelect(el, items, withAll){
     var opts = withAll ? '<option value="all">全部 '+withAll+'</option>' : '';
@@ -590,6 +771,18 @@
     for(var i=0;i<cards.length;i++){ if(cards[i].id===id) return cards[i]; }
     return null;
   }
+  function cardsForDomain(lib, domain){
+    return cards.filter(function(c){return c.lib===lib && c.domain===domain;});
+  }
+  function domainSummaries(){
+    var out = [];
+    Object.keys(DOMAINS).forEach(function(lib){
+      DOMAINS[lib].forEach(function(domain){
+        out.push({lib:lib, domain:domain, count:cardsForDomain(lib, domain).length});
+      });
+    });
+    return out;
+  }
   function totalForLib(lib){
     return cards.filter(function(c){return c.lib===lib;}).length;
   }
@@ -613,6 +806,54 @@
       '<div class="quick-row__right">'+chips.join("")+
       (chips.length?'<button class="mini-action" id="clearFilters">清空</button>':'')+'</div>';
   }
+  function renderDomainDock(){
+    var dock = $("#domainDock");
+    if(!dock) return;
+    dock.innerHTML = domainSummaries().map(function(item){
+      var personal = item.lib==="personal";
+      return '<button class="domain-chip-btn '+(personal?'personal':'')+'" data-domain-open="'+item.lib+'|'+esc(item.domain)+'">'+
+        '<span>'+libName(item.lib)+'</span><em>'+item.count+' 张</em><b>'+esc(item.domain)+'</b></button>';
+    }).join("");
+  }
+  function renderDomainFocus(lib, domain){
+    var box = $("#domainFocus");
+    if(!box) return;
+    var list = cardsForDomain(lib, domain);
+    $("#domainFocusKicker").textContent = libName(lib)+" · 领域点";
+    $("#domainFocusTitle").textContent = domain;
+    $("#domainFocusMeta").textContent = list.length+" 张卡片 · 与下方卡片库同步筛选";
+    if(list.length===0){
+      $("#domainFocusGrid").innerHTML = '<div class="domain-empty">'+esc(domain)+' 还没有卡片</div>';
+    } else {
+      $("#domainFocusGrid").innerHTML = list.map(function(c){
+        return '<article class="domain-node-card" tabindex="0" role="button" data-domain-card="'+esc(c.id)+'">'+
+          '<div class="domain-node-card__meta"><span>'+esc(c.type)+'</span><span>'+esc(c.conf)+'</span></div>'+
+          '<h3>'+esc(c.title || "未命名卡片")+'</h3>'+
+          '<p>'+esc(c.body || "—")+'</p></article>';
+      }).join("");
+    }
+    box.hidden = false;
+  }
+  function hideDomainFocus(){
+    var box = $("#domainFocus");
+    if(box) box.hidden = true;
+    domainFocusState = null;
+  }
+  function openDomain(lib, domain, silent){
+    if(!DOMAINS[lib] || DOMAINS[lib].indexOf(domain)<0) return;
+    document.querySelectorAll(".tab").forEach(function(x){x.setAttribute("aria-selected","false");});
+    document.querySelector('.tab[data-lib="'+lib+'"]').setAttribute("aria-selected","true");
+    state.lib = lib; state.domain = domain; state.type = "all"; state.q = "";
+    $("#search").value = "";
+    refreshFilters();
+    $("#fDomain").value = domain;
+    $("#fType").value = "all";
+    domainFocusState = {lib:lib, domain:domain};
+    render();
+    renderDomainFocus(lib, domain);
+    var focus = $("#domainFocus");
+    if(focus && !silent) focus.scrollIntoView({behavior:"smooth", block:"start"});
+  }
   function setView(view){
     state.view = view;
     $("#gridViewBtn").setAttribute("aria-pressed", view==="grid" ? "true" : "false");
@@ -623,7 +864,7 @@
     document.querySelectorAll(".tab").forEach(function(x){x.setAttribute("aria-selected","false");});
     document.querySelector('.tab[data-lib="'+lib+'"]').setAttribute("aria-selected","true");
     state.lib=lib; state.domain="all"; state.type="all"; state.q="";
-    $("#search").value=""; refreshFilters(); render();
+    $("#search").value=""; refreshFilters(); hideDomainFocus(); render();
   }
 
   function render(){
@@ -632,6 +873,8 @@
     document.body.classList.toggle("lib-personal", state.lib==="personal");
     var list = visibleCards();
     renderQuickRow(list);
+    renderDomainDock();
+    if(domainFocusState) renderDomainFocus(domainFocusState.lib, domainFocusState.domain);
     if(state.lib==="personal" && totalForLib("personal")===0){
       grid.innerHTML = '<div class="notice"><h3>个人库仅存在于本地</h3>'+
         '<p>原生家庭这类反思/洞察不上公开域名，也不与业务卡共用存储或推理引擎。在本地 repo 建 personal/ 目录，这个库不随站部署。</p></div>';
@@ -692,7 +935,7 @@
 
   var cmd = $("#cmd"), cmdIndex = 0, cmdItems = [];
   function commands(){
-    return [
+    var base = [
       {name:"录入卡片", hint:"capture", run:function(){closeCmd(); openModal();}},
       {name:"聚焦搜索", hint:"search", run:function(){closeCmd(); $("#search").focus();}},
       {name:"切换到业务库", hint:"library", run:function(){switchLib("business"); closeCmd();}},
@@ -702,8 +945,11 @@
       {name:"今日复盘", hint:"daily", run:function(){closeCmd(); if(window.__brain.openDailyReview) window.__brain.openDailyReview();}},
       {name:"导入 JSON", hint:"data", run:function(){closeCmd(); $("#importFile").click();}},
       {name:"导出当前库", hint:"data", run:function(){closeCmd(); $("#exportBtn").click();}},
-      {name:"清空筛选", hint:"filter", run:function(){state.domain="all"; state.type="all"; state.q=""; $("#search").value=""; $("#fDomain").value="all"; $("#fType").value="all"; render(); closeCmd();}}
+      {name:"清空筛选", hint:"filter", run:function(){state.domain="all"; state.type="all"; state.q=""; $("#search").value=""; $("#fDomain").value="all"; $("#fType").value="all"; hideDomainFocus(); render(); closeCmd();}}
     ];
+    return base.concat(domainSummaries().map(function(item){
+      return {name:"打开 "+item.domain+" 知识库", hint:libName(item.lib)+" · "+item.count+" 张", run:function(){closeCmd(); openDomain(item.lib, item.domain);}};
+    }));
   }
   function renderCmd(){
     var q = $("#cmdInput").value.trim().toLowerCase();
@@ -730,11 +976,37 @@
     });
   });
   $("#search").addEventListener("input", function(e){state.q=e.target.value; render();});
-  $("#fDomain").addEventListener("change", function(e){state.domain=e.target.value; render();});
+  $("#fDomain").addEventListener("change", function(e){
+    state.domain=e.target.value;
+    domainFocusState = state.domain==="all" ? null : {lib:state.lib, domain:state.domain};
+    render();
+  });
   $("#fType").addEventListener("change", function(e){state.type=e.target.value; render();});
   $("#gridViewBtn").addEventListener("click", function(){setView("grid");});
   $("#listViewBtn").addEventListener("click", function(){setView("list");});
   $("#commandBtn").addEventListener("click", openCmd);
+  $("#domainDock").addEventListener("click", function(e){
+    var btn = e.target.closest("[data-domain-open]");
+    if(!btn) return;
+    var parts = btn.getAttribute("data-domain-open").split("|");
+    openDomain(parts[0], parts.slice(1).join("|"));
+  });
+  $("#domainFocusGrid").addEventListener("click", function(e){
+    var card = e.target.closest("[data-domain-card]");
+    if(card) openDetail(card.getAttribute("data-domain-card"));
+  });
+  $("#domainFocusGrid").addEventListener("keydown", function(e){
+    if(e.key!=="Enter" && e.key!==" ") return;
+    var card = e.target.closest("[data-domain-card]");
+    if(!card) return;
+    e.preventDefault();
+    openDetail(card.getAttribute("data-domain-card"));
+  });
+  $("#domainFocusClose").addEventListener("click", hideDomainFocus);
+  $("#domainFocusOpenAll").addEventListener("click", function(){
+    if(domainFocusState) openDomain(domainFocusState.lib, domainFocusState.domain, true);
+    $("#grid").scrollIntoView({behavior:"smooth", block:"start"});
+  });
   $("#quickRow").addEventListener("click", function(e){
     var clear = e.target.closest("[data-clear]");
     if(clear){
@@ -742,11 +1014,12 @@
       if(target==="domain") state.domain="all";
       if(target==="type") state.type="all";
       if(target==="q"){state.q=""; $("#search").value="";}
+      if(target==="domain") hideDomainFocus();
       $("#fDomain").value=state.domain; $("#fType").value=state.type; render(); return;
     }
     if(e.target.id==="clearFilters"){
       state.domain="all"; state.type="all"; state.q=""; $("#search").value="";
-      $("#fDomain").value="all"; $("#fType").value="all"; render();
+      $("#fDomain").value="all"; $("#fType").value="all"; hideDomainFocus(); render();
     }
   });
   $("#grid").addEventListener("click", function(e){
@@ -771,11 +1044,15 @@
   function openModal(){
     fillSelect($("#cDomain"), DOMAINS[state.lib], false);
     fillSelect($("#cType"), TYPES, false);
+    if(state.domain!=="all") $("#cDomain").value=state.domain;
     $("#cTitle").value=""; $("#cBody").value=""; $("#cContext").value=""; $("#cSource").value=""; $("#cConf").value="high";
     modal.classList.add("open"); $("#cTitle").focus();
   }
   function closeModal(){modal.classList.remove("open");}
   window.__brain.openCapture = openModal;
+  window.__brain.openDomain = openDomain;
+  window.__brain.getDomainNodes = domainSummaries;
+  window.__brain.getCardsForDomain = function(lib, domain){return cardsForDomain(lib, domain).slice();};
   $("#captureBtn").addEventListener("click", openModal);
   $("#cancelBtn").addEventListener("click", closeModal);
   modal.addEventListener("click", function(e){if(e.target===modal) closeModal();});
@@ -817,6 +1094,7 @@
       status:"active", links:0});
     var persisted = storage.save();
     closeModal(); state.domain="all"; state.type="all"; state.q=""; $("#search").value="";
+    hideDomainFocus();
     $("#fDomain").value="all"; $("#fType").value="all"; render();
     toast(persisted ? "卡片已存入" : "已存入内存，浏览器未允许本地保存");
   });
@@ -1454,11 +1732,12 @@ window.addEventListener("load", function(){
     stage.appendChild(renderer.domElement);
     var canvas = renderer.domElement;
 
-    // lights: warm key on the awake side, cool fill on the dormant side
-    scene.add(new THREE.AmbientLight(0x3a4253, 0.6));
-    var key = new THREE.DirectionalLight(0xF0B45E, 1.15); key.position.set(3, 1.5, 2.5); scene.add(key);
-    var fill = new THREE.DirectionalLight(0x5577a0, 0.55); fill.position.set(-3, -1, -2); scene.add(fill);
-    var warmPt = new THREE.PointLight(0xF0B45E, 0.5, 8); warmPt.position.set(1.6, 0.4, 1.8); scene.add(warmPt);
+    // lights: cool water light, warm thinking pulses
+    scene.add(new THREE.AmbientLight(0x30445a, 0.72));
+    var key = new THREE.DirectionalLight(0x7AE7D8, 1.2); key.position.set(3, 1.5, 2.5); scene.add(key);
+    var fill = new THREE.DirectionalLight(0xF0B45E, 0.48); fill.position.set(-3, -1, -2); scene.add(fill);
+    var warmPt = new THREE.PointLight(0xF0B45E, 0.55, 8); warmPt.position.set(1.6, 0.4, 1.8); scene.add(warmPt);
+    var coolPt = new THREE.PointLight(0x7AE7D8, 0.65, 8); coolPt.position.set(-1.4, 0.3, 1.6); scene.add(coolPt);
 
     var group = new THREE.Group(); scene.add(group);
 
@@ -1484,13 +1763,14 @@ window.addEventListener("load", function(){
 
     // faint glass shell — lobed volume without looking solid
     var shellGeo = displace(new THREE.SphereGeometry(1, 96, 64));
-    group.add(new THREE.Mesh(shellGeo, new THREE.MeshBasicMaterial({
-      color:0x2b333f, transparent:true, opacity:0.10, side:THREE.DoubleSide, depthWrite:false
-    })));
+    var shellMesh = new THREE.Mesh(shellGeo, new THREE.MeshBasicMaterial({
+      color:0x244454, transparent:true, opacity:0.13, side:THREE.DoubleSide, depthWrite:false
+    }));
+    group.add(shellMesh);
 
-    // fresnel rim — warm glowing silhouette, reads as a hologram edge
+    // fresnel rim — glowing silhouette, reads as a hologram edge
     var fresnelMat = new THREE.ShaderMaterial({
-      uniforms:{ uColor:{value:new THREE.Color(0xF0B45E)}, uPower:{value:2.6}, uIntensity:{value:1.15} },
+      uniforms:{ uColor:{value:new THREE.Color(0x7AE7D8)}, uPower:{value:2.25}, uIntensity:{value:1.3} },
       vertexShader:[
         "varying vec3 vN; varying vec3 vView;",
         "void main(){",
@@ -1510,30 +1790,44 @@ window.addEventListener("load", function(){
       ].join("\n"),
       transparent:true, blending:THREE.AdditiveBlending, depthWrite:false, side:THREE.FrontSide
     });
-    group.add(new THREE.Mesh(shellGeo, fresnelMat));
+    var rimMesh = new THREE.Mesh(shellGeo, fresnelMat);
+    group.add(rimMesh);
 
     // wireframe — the line layer, undulating with the gyri
     var wireGeo = displace(new THREE.IcosahedronGeometry(1, 4));
-    group.add(new THREE.LineSegments(
+    var wireMesh = new THREE.LineSegments(
       new THREE.WireframeGeometry(wireGeo),
-      new THREE.LineBasicMaterial({color:0x6a7d96, transparent:true, opacity:0.24, depthWrite:false})
-    ));
+      new THREE.LineBasicMaterial({color:0x8fcbd0, transparent:true, opacity:0.26, depthWrite:false})
+    );
+    group.add(wireMesh);
 
     // ---- nodes ----
-    var NODES = [
-      {name:"录入",   tag:"已上线",          live:true,  action:"capture", dir:[ 0.88, 0.06, 0.46]},
-      {name:"存储",   tag:"已上线",          live:true,  action:"grid",    dir:[ 0.52, 0.50, 0.18]},
-      {name:"检索",   tag:"已上线",          live:true,  action:"search",  dir:[ 0.30, 0.66,-0.38]},
-      {name:"蒸馏",   tag:"待卡片提炼 · P2.4", live:false, action:null,      dir:[-0.58, 0.40, 0.34]},
-      {name:"推理建议",tag:"接口+mock · P2.2", live:true,  action:"review",  dir:[-0.74,-0.06,-0.32]},
-      {name:"主动推送",tag:"待 n8n · Phase 3", live:false, action:null,      dir:[-0.34,-0.50, 0.30]}
+    var MODULE_NODES = [
+      {kind:"module", name:"录入",   tag:"已上线",          live:true,  action:"capture", dir:[ 0.88, 0.06, 0.46]},
+      {kind:"module", name:"存储",   tag:"已上线",          live:true,  action:"grid",    dir:[ 0.52, 0.50, 0.18]},
+      {kind:"module", name:"检索",   tag:"已上线",          live:true,  action:"search",  dir:[ 0.30, 0.66,-0.38]},
+      {kind:"module", name:"蒸馏",   tag:"待卡片提炼 · P2.4", live:false, action:null,      dir:[-0.58, 0.40, 0.34]},
+      {kind:"module", name:"推理建议",tag:"接口+mock · P2.2", live:true,  action:"review",  dir:[-0.74,-0.06,-0.32]},
+      {kind:"module", name:"主动推送",tag:"待 n8n · Phase 3", live:false, action:null,      dir:[-0.34,-0.50, 0.30]}
     ];
+    var domainDirs = [
+      [ .06, .86, .38], [ .78, .36,-.48], [ .80,-.34, .28],
+      [-.10,-.88, .32], [-.82,-.30,-.40], [-.74, .46, .18]
+    ];
+    var domainData = window.__brain && window.__brain.getDomainNodes ? window.__brain.getDomainNodes() : [];
+    var DOMAIN_NODES = domainData.map(function(item, i){
+      return {
+        kind:"domain", name:item.domain, tag:item.count+" 张卡片", live:true, action:"domain",
+        lib:item.lib, domain:item.domain, count:item.count, dir:domainDirs[i % domainDirs.length]
+      };
+    });
+    var NODES = MODULE_NODES.concat(DOMAIN_NODES);
 
-    function glowSprite(size, color){
+    function glowSprite(size, color, mid, end){
       var c = document.createElement("canvas"); c.width=c.height=64;
       var g = c.getContext("2d");
       var grd = g.createRadialGradient(32,32,0,32,32,32);
-      grd.addColorStop(0, color); grd.addColorStop(0.35,"rgba(240,180,94,0.35)"); grd.addColorStop(1,"rgba(240,180,94,0)");
+      grd.addColorStop(0, color); grd.addColorStop(0.35, mid || "rgba(122,231,216,0.35)"); grd.addColorStop(1, end || "rgba(122,231,216,0)");
       g.fillStyle = grd; g.fillRect(0,0,64,64);
       var tex = new THREE.CanvasTexture(c);
       var m = new THREE.Sprite(new THREE.SpriteMaterial({map:tex, blending:THREE.AdditiveBlending, depthWrite:false, transparent:true}));
@@ -1543,17 +1837,29 @@ window.addEventListener("load", function(){
     var pickables = [];
     NODES.forEach(function(nd){
       var d = new THREE.Vector3(nd.dir[0],nd.dir[1],nd.dir[2]).normalize();
-      var p = surface(d.x,d.y,d.z).multiplyScalar(1.02);
+      var p = surface(d.x,d.y,d.z).multiplyScalar(nd.kind==="domain" ? 1.13 : 1.02);
       nd.pos = p;
+      var isDomain = nd.kind==="domain";
+      var coreColor = !nd.live ? 0x47526a : (isDomain ? (nd.lib==="personal" ? 0xE995A4 : 0x7AE7D8) : 0xF0B45E);
       var core = new THREE.Mesh(
-        new THREE.SphereGeometry(nd.live?0.058:0.05, 24, 24),
-        nd.live ? new THREE.MeshBasicMaterial({color:0xF0B45E})
-                : new THREE.MeshBasicMaterial({color:0x47526a, transparent:true, opacity:0.95})
+        new THREE.SphereGeometry(isDomain ? 0.07 + Math.min(nd.count, 8)*0.004 : (nd.live?0.058:0.05), 28, 28),
+        nd.live ? new THREE.MeshBasicMaterial({color:coreColor})
+                : new THREE.MeshBasicMaterial({color:coreColor, transparent:true, opacity:0.95})
       );
       core.position.copy(p); core.userData.node = nd; group.add(core);
       nd.core = core; pickables.push(core);
       if(nd.live){
-        var halo = glowSprite(0.42, "rgba(240,180,94,0.95)"); halo.position.copy(p); group.add(halo); nd.halo = halo;
+        var halo = isDomain && nd.lib==="personal"
+          ? glowSprite(0.48, "rgba(233,149,164,0.92)", "rgba(233,149,164,0.34)", "rgba(233,149,164,0)")
+          : isDomain
+            ? glowSprite(0.50, "rgba(122,231,216,0.96)", "rgba(122,231,216,0.34)", "rgba(122,231,216,0)")
+            : glowSprite(0.42, "rgba(240,180,94,0.95)", "rgba(240,180,94,0.35)", "rgba(240,180,94,0)");
+        halo.position.copy(p); group.add(halo); nd.halo = halo;
+        if(isDomain){
+          var ring = new THREE.Mesh(new THREE.RingGeometry(0.10,0.115,40),
+            new THREE.MeshBasicMaterial({color:coreColor, side:THREE.DoubleSide, transparent:true, opacity:0.46}));
+          ring.position.copy(p); ring.lookAt(p.clone().multiplyScalar(2)); group.add(ring); nd.ring = ring;
+        }
       } else {
         var ring = new THREE.Mesh(new THREE.RingGeometry(0.066,0.078,28),
           new THREE.MeshBasicMaterial({color:0x4a5364, side:THREE.DoubleSide, transparent:true, opacity:0.5}));
@@ -1562,29 +1868,34 @@ window.addEventListener("load", function(){
     });
 
     // ---- edges (pipeline order) ----
-    function edge(a, b, live){
+    function edge(a, b, live, tone){
       var mid = a.clone().add(b).multiplyScalar(0.5);
-      mid.multiplyScalar(1.16); // arc outward over the surface
+      mid.multiplyScalar(tone==="domain" ? 1.30 : 1.16); // arc outward over the surface
       var curve = new THREE.QuadraticBezierCurve3(a, mid, b);
-      var tube = new THREE.TubeGeometry(curve, 24, live?0.012:0.007, 8, false);
-      var mat = live ? new THREE.MeshBasicMaterial({color:0xF0B45E, transparent:true, opacity:0.65})
+      var tube = new THREE.TubeGeometry(curve, 24, tone==="domain"?0.006:(live?0.012:0.007), 8, false);
+      var liveColor = tone==="domain" ? 0x7AE7D8 : 0xF0B45E;
+      var mat = live ? new THREE.MeshBasicMaterial({color:liveColor, transparent:true, opacity:tone==="domain"?0.36:0.65})
                      : new THREE.MeshBasicMaterial({color:0x3c4250, transparent:true, opacity:0.5});
       group.add(new THREE.Mesh(tube, mat));
       return curve;
     }
     var liveCurves = [];
-    for(var e=0; e<NODES.length-1; e++){
-      var a=NODES[e], b=NODES[e+1];
+    for(var e=0; e<MODULE_NODES.length-1; e++){
+      var a=MODULE_NODES[e], b=MODULE_NODES[e+1];
       var isLive = a.live && b.live;
       var cv = edge(a.pos, b.pos, isLive);
       if(isLive) liveCurves.push(cv);
     }
+    DOMAIN_NODES.forEach(function(nd){
+      var cv = edge(MODULE_NODES[1].pos, nd.pos, true, "domain");
+      liveCurves.push(cv);
+    });
 
     // ---- traveling signals along the live arc ----
     var signals = [];
     if(!reduced && liveCurves.length){
-      for(var s=0;s<2;s++){
-        var sig = new THREE.Mesh(new THREE.SphereGeometry(0.026,12,12), new THREE.MeshBasicMaterial({color:0xFFE0A8}));
+      for(var s=0;s<Math.min(5, Math.max(2, liveCurves.length));s++){
+        var sig = new THREE.Mesh(new THREE.SphereGeometry(0.023,12,12), new THREE.MeshBasicMaterial({color:s%2?0x7AE7D8:0xFFE0A8}));
         group.add(sig); signals.push({mesh:sig, t:s*0.5});
       }
     }
@@ -1612,8 +1923,10 @@ window.addEventListener("load", function(){
       tip.style.top  = ((-wp.y*0.5+0.5)*r.height + (r.top-hr.top)) + "px";
     }
     function showTip(nd){
-      tip.innerHTML = '<b>'+nd.name+'</b><span class="st '+(nd.live?'st--live':'st--off')+'">'+
-        (nd.live?'● ':'○ ')+nd.tag+'</span>';
+      var label = nd.kind==="domain" ? nd.name+" 知识库" : nd.name;
+      var mark = nd.kind==="domain" ? "◆ " : (nd.live?'● ':'○ ');
+      tip.innerHTML = '<b>'+label+'</b><span class="st '+(nd.live?'st--live':'st--off')+'">'+
+        mark+nd.tag+'</span>';
       placeTip(nd); tip.classList.add("show");
     }
 
@@ -1639,7 +1952,8 @@ window.addEventListener("load", function(){
       if(!moved){
         var nd = pick(ev);
         if(nd && nd.live && nd.action){
-          if(nd.action==="capture") window.__brain.openCapture();
+          if(nd.action==="domain" && window.__brain.openDomain) window.__brain.openDomain(nd.lib, nd.domain);
+          else if(nd.action==="capture") window.__brain.openCapture();
           else if(nd.action==="search"){var el=document.getElementById("search"); el.scrollIntoView({behavior:"smooth",block:"center"}); el.focus();}
           else if(nd.action==="grid"){document.getElementById("grid").scrollIntoView({behavior:"smooth",block:"start"});}
           else if(nd.action==="review" && window.__brain.openDailyReview){window.__brain.openDailyReview();}
@@ -1661,9 +1975,34 @@ window.addEventListener("load", function(){
     function animate(){
       requestAnimationFrame(animate);
       var dt = clock.getDelta();
+      var elapsed = clock.getElapsedTime();
       if(!dragging && !hovered && !reduced) targetRotY += 0.16*dt;
       group.rotation.y += (targetRotY - group.rotation.y)*0.12;
       group.rotation.x += (targetRotX - group.rotation.x)*0.12;
+      var breath = 1 + Math.sin(elapsed*1.3)*0.012;
+      shellMesh.scale.setScalar(breath);
+      rimMesh.scale.setScalar(1 + Math.sin(elapsed*1.1 + 1.2)*0.018);
+      wireMesh.rotation.z = Math.sin(elapsed*.42)*0.035;
+      warmPt.intensity = 0.45 + Math.sin(elapsed*1.7)*0.12;
+      coolPt.intensity = 0.58 + Math.cos(elapsed*1.3)*0.10;
+
+      NODES.forEach(function(nd, i){
+        if(nd.halo){
+          var base = nd.kind==="domain" ? 0.50 : 0.42;
+          var pulse = base * (1 + Math.sin(elapsed*2.1 + i*.8)*0.12);
+          nd.halo.scale.set(pulse, pulse, 1);
+        }
+        if(nd.ring){
+          nd.ring.rotation.z += dt * (nd.lib==="personal" ? -0.8 : 0.8);
+          nd.ring.material.opacity = 0.34 + Math.sin(elapsed*1.8 + i)*0.12;
+        }
+        if(nd.kind==="domain" && nd.core){
+          var bob = Math.sin(elapsed*1.4 + i)*0.012;
+          nd.core.position.copy(nd.pos.clone().multiplyScalar(1 + bob));
+          if(nd.halo) nd.halo.position.copy(nd.core.position);
+          if(nd.ring) nd.ring.position.copy(nd.core.position);
+        }
+      });
 
       if(signals.length){
         var seg = liveCurves.length;
