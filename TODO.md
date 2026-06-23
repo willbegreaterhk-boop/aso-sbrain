@@ -1,17 +1,15 @@
 # TODO
 
-## 当前任务
-- [x] 确认当前目录已初始化 Git
-- [x] 确认 GitHub 远程仓库已连接
-- [x] 确认 Windows 可以 push
-- [x] 确认 macOS 可以 clone / pull
-- [ ] 确认 `brain-two.html` 可以正常打开
-- [ ] 整理项目目录结构
-- [ ] 明确下一步是否接入 API
+事实源：`AGENTS.md` 和 `DAILY-LOOP-SPEC.md`。
 
-## 已完成
-- [x] 创建 Brain Two 基础项目
-- [x] 初始化当前目录 Git 仓库
-- [x] 连接 GitHub 远程仓库 `willbegreaterhk-boop/aso-sbrain`
-- [x] 将本地 `main` 分支成功推送到 GitHub
-- [x] 在 macOS 成功 clone 并执行 pull
+## 当前任务
+- [x] 同步远端 `main`，确认基于 `1b7be07` 或更新提交工作。
+- [x] 补 `.gitignore`：`*.local`、`*.local.json`、`cards*.json`。
+- [x] 纳入 `AGENTS.md` 和 `DAILY-LOOP-SPEC.md` 为唯一事实源。
+- [ ] 实现 `DAILY-LOOP-SPEC.md` P2.0-P2.2 与首页「今日」区块。
+- [ ] 按 `DAILY-LOOP-SPEC.md` 第 5 节自测。
+- [ ] 推送前确认无个人数据、无 key 进仓库。
+
+## 暂缓
+- P2.3 真代理 / 真 API。
+- P2.4 卡片提炼和夜间自动复盘。

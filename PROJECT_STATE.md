@@ -1,49 +1,18 @@
-# Brain Two 项目状态
+# PROJECT_STATE.md
 
-## 项目目标
-这是我的第二大脑工具，用来辅助创业、Shopify、3D 打印产品、AI Agent 执行和个人决策系统沉淀。
+项目状态的唯一事实源已合并到：
+- `AGENTS.md`
+- `DAILY-LOOP-SPEC.md`
 
-## 当前设备
-- Windows：历史主要开发环境
-- macOS：新同步环境
-- GitHub：作为项目同步中心
-- 当前目标环境：Windows + macOS 双端稳定同步
+本文件只保留轻量指针，避免重复规则。
 
-## 当前进度
-- 当前目录正在建立跨设备同步机制
-- 当前目录正在建立 AI 接手规则
-- 当前目录暂未检测到 `brain-two.html`
-- 已从 GitHub 远程仓库同步到 `index.html`、`DEPLOY.md` 和 `CNAME`
-- 已创建项目说明、状态记录、任务清单和 AI 工作规则文档
-- 已连接 GitHub 远程仓库：`https://github.com/willbegreaterhk-boop/aso-sbrain.git`
-- 已验证 Windows 当前环境可以 push 到 GitHub
-- 已验证 macOS 当前环境可以 clone / pull GitHub 仓库
+## 当前基线
+- GitHub：`willbegreaterhk-boop/aso-sbrain`
+- 域名：`k1mzee.icu`
+- Pages 源：`main` 分支，根目录 `/`
+- 主文件：`index.html`
+- 当前工作基线：`1b7be07` 之后，已追加隐私忽略提交 `f6916b7`
 
-## 当前最高优先级
-1. 确保 Windows 和 macOS 项目文件一致
-2. 确保每次 AI 接手前能读取项目状态
-3. 确保每次修改后能提交到 Git
-
-## 最近一次修改记录
-- 2026-06-22：创建跨设备同步文档、AI 接手规则、TODO 清单和前端/本地项目 `.gitignore`
-- 2026-06-22：初始化当前目录 Git 仓库
-- 2026-06-22：连接 GitHub 远程仓库并成功推送 `main` 分支
-- 2026-06-22：确认 macOS 可以 clone / pull 当前 GitHub 仓库
-
-## 给 AI 的接手说明
-每次开始工作前，必须先读取：
-- `README.md`
-- `CLAUDE.md`
-- `PROJECT_STATE.md`
-- `TODO.md`
-
-每次完成工作后，必须更新：
-- `PROJECT_STATE.md`
-- `TODO.md`
-
-## AI 接手规则
-- 先诊断，不要急着改
-- 所有修改必须服务于当前最高优先级
-- 不要删除用户已有内容
-- 不要重写 `brain-two.html`，除非用户明确要求
-- 遇到不确定的地方，先用中文说明风险
+## 当前工作
+- 本轮按 `DAILY-LOOP-SPEC.md` 实现 P2.0-P2.2。
+- 真实 API / 代理 / key / P2.4 卡片提炼不在本轮范围。
