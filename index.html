@@ -32,16 +32,16 @@
   .sr-only{position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden;
     clip:rect(0,0,0,0); white-space:nowrap; border:0}
 
-  .app-head{display:flex; align-items:center; justify-content:space-between; gap:16px;
+  .app-head{display:none; align-items:center; justify-content:space-between; gap:16px;
     padding:24px 0 14px; flex-wrap:wrap}
   .mark{font-family:var(--display); font-weight:700; font-size:22px; letter-spacing:.3px;
     display:flex; align-items:center; gap:11px}
   .mark .glyph{color:var(--live); font-size:19px; filter:drop-shadow(0 0 7px var(--live-glow))}
 
   .hero{position:relative; display:grid; grid-template-columns:1fr; place-items:center;
-    min-height:calc(100vh - 76px); padding:0 0 24px; overflow:visible}
+    min-height:100vh; padding:0; overflow:visible}
   .hero::after{content:""; position:absolute; left:50%; bottom:8px; width:78vw; max-width:980px; height:1px;
-    transform:translateX(-50%); background:linear-gradient(90deg, transparent, rgba(122,231,216,.36), transparent)}
+    transform:translateX(-50%); background:linear-gradient(90deg, transparent, rgba(122,231,216,.36), transparent); display:none}
   .hero__copy{display:none}
   .hero__eyebrow{font-family:var(--mono); font-size:10.5px; letter-spacing:1.6px;
     text-transform:uppercase; color:var(--live); margin:0 0 10px}
@@ -49,7 +49,7 @@
     letter-spacing:0; max-width:620px; text-wrap:balance}
   .hero__lede{font-size:14px; color:#B8C7C9; max-width:520px; margin:16px 0 0}
   .brain-shell{grid-column:1; grid-row:1; position:relative; min-width:0; width:100%}
-  .brain-stage{position:relative; width:100%; max-width:900px; height:min(70vh,620px); min-height:430px; margin:0 auto}
+  .brain-stage{position:relative; width:100%; max-width:560px; height:min(52vh,430px); min-height:300px; margin:0 auto}
   .brain-stage canvas{display:block; width:100%; height:100%; touch-action:none; cursor:grab}
   .brain-stage canvas.grabbing{cursor:grabbing}
   .brain-stage .fallback{position:absolute; inset:0; display:flex; align-items:center;
@@ -76,7 +76,7 @@
   .hero__hint{color:var(--faint)}
 
   .domain-dock{grid-column:1; grid-row:1; position:absolute; left:50%; bottom:34px; transform:translateX(-50%);
-    display:flex; justify-content:center; align-items:center; gap:14px; width:min(420px,calc(100% - 40px))}
+    display:none; justify-content:center; align-items:center; gap:14px; width:min(420px,calc(100% - 40px))}
   .domain-dot-btn{width:13px; height:13px; border-radius:50%; padding:0; border:1px solid rgba(122,231,216,.72);
     background:var(--live); box-shadow:0 0 18px rgba(122,231,216,.40); cursor:pointer;
     transition:transform .16s ease, box-shadow .16s ease, opacity .16s ease}
@@ -96,9 +96,12 @@
   .domain-chip-btn em{font-family:var(--mono); font-style:normal; font-size:11px; color:var(--live)}
   .domain-chip-btn.personal em{color:var(--personal)}
 
-  .domain-focus{position:relative; margin:18px 0 24px; border:1px solid rgba(122,231,216,.24); border-radius:16px;
-    background:linear-gradient(180deg, rgba(12,20,28,.84), rgba(14,20,27,.96)); padding:18px;
-    box-shadow:0 30px 90px -70px rgba(122,231,216,.55)}
+  .domain-focus{position:fixed; left:50%; bottom:22px; z-index:45; width:min(880px,calc(100vw - 36px));
+    max-height:min(72vh,640px); overflow:auto; transform:translate(-50%,16px); margin:0;
+    border:1px solid rgba(122,231,216,.30); border-radius:16px;
+    background:linear-gradient(180deg, rgba(12,20,28,.92), rgba(14,20,27,.98)); padding:18px;
+    box-shadow:0 28px 90px -42px rgba(0,0,0,.86), 0 30px 90px -70px rgba(122,231,216,.55);
+    backdrop-filter:blur(14px); opacity:0; animation:popupIn .18s ease forwards}
   .domain-focus[hidden]{display:none}
   .domain-focus::before{content:""; position:absolute; inset:0; border-radius:16px; pointer-events:none;
     background:linear-gradient(130deg, rgba(122,231,216,.12), transparent 36%, rgba(240,180,94,.08))}
@@ -312,11 +315,12 @@
   @keyframes rise{from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:translateY(0)}}
   @keyframes drawerIn{to{opacity:1; transform:translateX(0)}}
   @keyframes cmdIn{to{opacity:1; transform:translateX(-50%) translateY(0)}}
+  @keyframes popupIn{to{opacity:1; transform:translate(-50%,0)}}
 
   @media (max-width:560px){
     .wrap{padding:0 16px}
     .app-head{padding-top:18px}
-    .hero{grid-template-columns:1fr; min-height:calc(100vh - 64px); gap:0; padding:0 0 22px}
+    .hero{grid-template-columns:1fr; min-height:100vh; gap:0; padding:0}
     .brain-shell{grid-column:1; grid-row:1}
     .hero__title{font-size:44px; line-height:.96}
     .hero__lede{font-size:13px; margin-top:12px}
@@ -329,8 +333,9 @@
     .grid.is-list .card{display:flex}
     .search{order:3; flex-basis:100%}
     .view-toggle{order:4}
-    .brain-stage{height:min(58vh,430px); min-height:360px}
+    .brain-stage{height:min(36vh,300px); min-height:230px; max-width:300px}
     .hero__bar{gap:12px}
+    .domain-focus{bottom:10px; width:calc(100vw - 20px); max-height:78vh; padding:14px; border-radius:14px}
     .drawer__panel{padding:20px}
     .drawer__grid{grid-template-columns:1fr}
     .today{padding:14px}
@@ -379,7 +384,7 @@
     </div>
   </section>
 
-  <section class="domain-focus" id="domainFocus" hidden aria-live="polite">
+  <section class="domain-focus" id="domainFocus" hidden aria-live="polite" tabindex="-1">
     <div class="domain-focus__head">
       <div>
         <p class="domain-focus__kicker" id="domainFocusKicker">领域库</p>
@@ -828,12 +833,12 @@
   function renderDomainFocus(lib, domain){
     var box = $("#domainFocus");
     if(!box) return;
-    var list = cardsForDomain(lib, domain);
-    $("#domainFocusKicker").textContent = libName(lib)+" · 领域点";
-    $("#domainFocusTitle").textContent = domain;
-    $("#domainFocusMeta").textContent = list.length+" 张卡片 · 与下方卡片库同步筛选";
+    var list = domain ? cardsForDomain(lib, domain) : cards.filter(function(c){return c.lib===lib;});
+    $("#domainFocusKicker").textContent = domain ? libName(lib)+" · 领域点" : libName(lib)+" · 大脑弹层";
+    $("#domainFocusTitle").textContent = domain || "知识库";
+    $("#domainFocusMeta").textContent = list.length+" 张卡片";
     if(list.length===0){
-      $("#domainFocusGrid").innerHTML = '<div class="domain-empty">'+esc(domain)+' 还没有卡片</div>';
+      $("#domainFocusGrid").innerHTML = '<div class="domain-empty">'+esc(domain || libName(lib))+' 还没有卡片</div>';
     } else {
       $("#domainFocusGrid").innerHTML = list.map(function(c){
         return '<article class="domain-node-card" tabindex="0" role="button" data-domain-card="'+esc(c.id)+'">'+
@@ -849,6 +854,19 @@
     if(box) box.hidden = true;
     domainFocusState = null;
   }
+  function openKnowledge(lib){
+    lib = DOMAINS[lib] ? lib : state.lib;
+    document.querySelectorAll(".tab").forEach(function(x){x.setAttribute("aria-selected","false");});
+    document.querySelector('.tab[data-lib="'+lib+'"]').setAttribute("aria-selected","true");
+    state.lib = lib; state.domain = "all"; state.type = "all"; state.q = "";
+    $("#search").value = "";
+    refreshFilters();
+    $("#fDomain").value = "all";
+    $("#fType").value = "all";
+    domainFocusState = {lib:lib, domain:null};
+    render();
+    renderDomainFocus(lib, null);
+  }
   function openDomain(lib, domain, silent){
     if(!DOMAINS[lib] || DOMAINS[lib].indexOf(domain)<0) return;
     document.querySelectorAll(".tab").forEach(function(x){x.setAttribute("aria-selected","false");});
@@ -862,7 +880,7 @@
     render();
     renderDomainFocus(lib, domain);
     var focus = $("#domainFocus");
-    if(focus && !silent) focus.scrollIntoView({behavior:"smooth", block:"start"});
+    if(focus && !silent) focus.focus && focus.focus();
   }
   function setView(view){
     state.view = view;
@@ -1014,8 +1032,7 @@
   });
   $("#domainFocusClose").addEventListener("click", hideDomainFocus);
   $("#domainFocusOpenAll").addEventListener("click", function(){
-    if(domainFocusState) openDomain(domainFocusState.lib, domainFocusState.domain, true);
-    $("#grid").scrollIntoView({behavior:"smooth", block:"start"});
+    openKnowledge(domainFocusState ? domainFocusState.lib : state.lib);
   });
   $("#quickRow").addEventListener("click", function(e){
     var clear = e.target.closest("[data-clear]");
@@ -1061,6 +1078,7 @@
   function closeModal(){modal.classList.remove("open");}
   window.__brain.openCapture = openModal;
   window.__brain.openDomain = openDomain;
+  window.__brain.openKnowledge = openKnowledge;
   window.__brain.getDomainNodes = domainSummaries;
   window.__brain.getCardsForDomain = function(lib, domain){return cardsForDomain(lib, domain).slice();};
   $("#captureBtn").addEventListener("click", openModal);
@@ -1734,7 +1752,7 @@ window.addEventListener("load", function(){
     var W = stage.clientWidth, H = stage.clientHeight;
     var scene = new THREE.Scene();
     var camera = new THREE.PerspectiveCamera(42, W/H, 0.1, 100);
-    camera.position.set(0, 0.1, 3.5);
+    camera.position.set(0, 0.1, 4.45);
 
     var renderer = new THREE.WebGLRenderer({antialias:true, alpha:true});
     renderer.setPixelRatio(Math.min(window.devicePixelRatio||1, 2));
@@ -1961,13 +1979,8 @@ window.addEventListener("load", function(){
       dragging=false; canvas.classList.remove("grabbing");
       if(!moved){
         var nd = pick(ev);
-        if(nd && nd.live && nd.action){
-          if(nd.action==="domain" && window.__brain.openDomain) window.__brain.openDomain(nd.lib, nd.domain);
-          else if(nd.action==="capture") window.__brain.openCapture();
-          else if(nd.action==="search"){var el=document.getElementById("search"); el.scrollIntoView({behavior:"smooth",block:"center"}); el.focus();}
-          else if(nd.action==="grid"){document.getElementById("grid").scrollIntoView({behavior:"smooth",block:"start"});}
-          else if(nd.action==="review" && window.__brain.openDailyReview){window.__brain.openDailyReview();}
-        }
+        if(nd && nd.kind==="domain" && window.__brain.openDomain) window.__brain.openDomain(nd.lib, nd.domain);
+        else if(window.__brain.openKnowledge) window.__brain.openKnowledge("business");
       }
     }
     canvas.addEventListener("pointerup", endDrag);
