@@ -120,14 +120,14 @@
   .domain-node-card{position:relative; min-width:0; min-height:112px; border:1px solid rgba(122,231,216,.18);
     border-radius:10px; background:radial-gradient(circle at 50% 42%, rgba(122,231,216,.22), transparent 34%), rgba(8,13,19,.42);
     padding:13px; cursor:pointer; overflow:hidden; transition:transform .16s ease, border-color .16s ease, background .16s ease}
-  .domain-node-card::before{content:""; position:absolute; left:50%; top:50%; width:28px; height:28px;
-    transform:translate(-50%,-50%) rotate(18deg); background:var(--live);
+  .domain-node-card::before{content:""; position:absolute; right:13px; top:13px; width:18px; height:18px;
+    transform:rotate(18deg); background:var(--live);
     clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 56%,79% 91%,50% 70%,21% 91%,32% 56%,2% 35%,39% 35%);
-    filter:drop-shadow(0 0 15px rgba(122,231,216,.72)); opacity:.92}
-  .domain-node-card::after{content:""; position:absolute; inset:18px; border:1px solid rgba(122,231,216,.12);
+    filter:drop-shadow(0 0 12px rgba(122,231,216,.72)); opacity:.86}
+  .domain-node-card::after{content:""; position:absolute; right:9px; top:9px; width:26px; height:26px; border:1px solid rgba(122,231,216,.12);
     border-radius:999px; transform:rotate(-10deg)}
   .domain-node-card:hover{transform:translateY(-2px); border-color:rgba(122,231,216,.55); background:rgba(19,31,41,.72)}
-  .domain-node-card > *{display:none}
+  .domain-node-card > *{position:relative; z-index:1}
   .domain-node-card h3{font-family:var(--display); font-weight:500; font-size:15.5px; line-height:1.25; margin:8px 0 6px}
   .domain-node-card p{font-size:12.5px; color:#BFD0D0; margin:0; overflow-wrap:anywhere}
   .domain-node-card__meta{display:flex; justify-content:space-between; gap:10px; font-family:var(--mono); font-size:10px; color:var(--faint)}
@@ -179,9 +179,13 @@
   .wrap{max-width:none; min-height:100vh; padding:0}
   .app-head{position:fixed; left:22px; top:18px; right:22px; z-index:8; display:flex; padding:0; pointer-events:none}
   .mark{gap:0; font-size:20px; pointer-events:auto}
-  .mark .glyph,.head-actions,.hero__copy,.domain-dock,.brain-input,.hero__bar,.domain-focus,.today,.bar,.quick-row,#grid,.foot,.modal,.drawer,.cmd{display:none !important}
+  .mark .glyph,.head-actions,.hero__copy,.domain-dock,.hero__bar,.today,.bar,.quick-row,#grid,.foot,.modal,.cmd{display:none !important}
   .hero{min-height:100vh; padding:0}
   .brain-shell{display:grid; place-items:center; min-height:100vh}
+  .brain-input{position:absolute; top:clamp(82px,13vh,128px); left:50%; z-index:6; transform:translateX(-50%);
+    display:block; width:min(420px,calc(100vw - 44px)); height:44px; margin:0; border-radius:999px;
+    text-align:center; background:rgba(8,13,19,.34)}
+  .brain-input::placeholder{color:rgba(237,244,243,.38)}
   .brain-stage{width:100%; max-width:min(78vw,760px); height:min(72vh,620px); min-height:420px}
 
   .today{margin:22px 0 24px; border:1px solid var(--line); border-radius:14px;
@@ -361,7 +365,7 @@
     .grid.is-list .card{display:flex}
     .search{order:3; flex-basis:100%}
     .view-toggle{order:4}
-    .brain-input{width:min(300px,calc(100% - 28px)); height:42px; margin-bottom:14px}
+    .brain-input{top:92px; width:min(300px,calc(100% - 28px)); height:42px; margin-bottom:0}
     .brain-stage{height:min(56vh,430px); min-height:300px; max-width:min(86vw,390px)}
     .hero__bar{gap:12px}
     .domain-focus{bottom:10px; width:calc(100vw - 20px); max-height:78vh; padding:14px; border-radius:14px}
@@ -400,7 +404,7 @@
     </div>
     <div class="domain-dock" id="domainDock" aria-label="领域知识库"></div>
     <div class="brain-shell">
-      <textarea class="brain-input" id="brainInput" rows="1" aria-label="输入"></textarea>
+      <textarea class="brain-input" id="brainInput" rows="1" placeholder="搜索卡片" aria-label="搜索卡片"></textarea>
       <div class="brain-stage" id="stage">
         <div class="fallback" id="fallback" hidden>3D 大脑需要 WebGL。换支持 WebGL 的浏览器即可看到立体版。</div>
       </div>
@@ -915,8 +919,7 @@
       '<div class="decision-result"><p>'+esc(decision.answer || "")+'</p>'+
       '<ul>'+((decision.caveats || []).map(function(x){return '<li>'+esc(x)+'</li>';}).join(""))+'</ul></div>'+
       relevant.map(function(c){
-        return '<article class="domain-node-card" tabindex="0" role="button" data-domain-card="'+esc(c.id)+'" aria-label="卡片">'+
-          '<div class="domain-node-card__meta"><span></span><span></span></div><h3></h3><p></p></article>';
+        return renderDomainCard(c);
       }).join("");
     box.hidden = false;
   }
@@ -1011,11 +1014,44 @@
     if(list.length===0){
       $("#domainFocusGrid").innerHTML = '<div class="domain-empty">'+esc(domain || libName(lib))+' 还没有卡片</div>';
     } else {
-      $("#domainFocusGrid").innerHTML = list.map(function(c){
-        return '<article class="domain-node-card" tabindex="0" role="button" data-domain-card="'+esc(c.id)+'" aria-label="卡片">'+
-          '<div class="domain-node-card__meta"><span></span><span></span></div><h3></h3><p></p></article>';
-      }).join("");
+      $("#domainFocusGrid").innerHTML = list.map(renderDomainCard).join("");
     }
+    box.hidden = false;
+  }
+  function renderDomainCard(c){
+    var title = c.title || c.type || c.domain || "卡片";
+    return '<article class="domain-node-card" tabindex="0" role="button" data-domain-card="'+esc(c.id)+'" aria-label="'+esc(title)+'">'+
+      '<div class="domain-node-card__meta"><span>'+esc(c.domain)+' · '+esc(c.type)+'</span><span>'+esc(c.id)+'</span></div>'+
+      '<h3>'+esc(title)+'</h3><p>'+esc(c.body || "")+'</p></article>';
+  }
+  function searchCards(query){
+    query = toText(query).trim().toLowerCase();
+    if(!query) return [];
+    var terms = tokenize(query);
+    return cards.map(function(c){
+      var text = (c.title+" "+c.body+" "+c.context+" "+c.domain+" "+c.type+" "+c.source).toLowerCase();
+      var score = 0;
+      terms.forEach(function(t){ if(text.indexOf(t)>-1) score += Math.min(6, t.length); });
+      if(text.indexOf(query)>-1) score += 12;
+      return {card:c, score:score};
+    }).filter(function(x){return x.score>0;})
+      .sort(function(a,b){return b.score-a.score;})
+      .slice(0, 12)
+      .map(function(x){return x.card;});
+  }
+  function openSearchResults(query){
+    query = toText(query).trim();
+    if(!query) return;
+    var box = $("#domainFocus");
+    var list = searchCards(query);
+    if(!box) return;
+    domainFocusState = null;
+    $("#domainFocusKicker").textContent = "搜索";
+    $("#domainFocusTitle").textContent = query;
+    $("#domainFocusMeta").textContent = list.length ? list.length+" 张匹配卡片" : "没有匹配卡片";
+    $("#domainFocusGrid").innerHTML = list.length
+      ? list.map(renderDomainCard).join("")
+      : '<div class="domain-empty">没有找到相关卡片</div>';
     box.hidden = false;
   }
   function hideDomainFocus(){
@@ -1206,7 +1242,7 @@
   $("#brainInput").addEventListener("keydown", function(e){
     if(e.key==="Enter" && !e.shiftKey){
       e.preventDefault();
-      askDecision(e.target.value);
+      openSearchResults(e.target.value);
     }
   });
   $("#quickRow").addEventListener("click", function(e){
@@ -1255,6 +1291,7 @@
   window.__brain.openDomain = openDomain;
   window.__brain.openKnowledge = openKnowledge;
   window.__brain.askDecision = askDecision;
+  window.__brain.openSearchResults = openSearchResults;
   window.__brain.promoteReviewCards = promoteReviewCards;
   window.__brain.getDomainNodes = domainSummaries;
   window.__brain.getCardsForDomain = function(lib, domain){return cardsForDomain(lib, domain).slice();};
@@ -2091,6 +2128,11 @@ window.addEventListener("load", function(){
         isDomain && nd.lib==="personal" ? "rgba(233,149,164,0.56)" : "rgba(122,231,216,0.56)");
       core.position.copy(p); core.userData.node = nd; group.add(core);
       nd.core = core; pickables.push(core);
+      var hitGeo = new THREE.SphereGeometry(isDomain ? 0.20 : 0.17, 16, 16);
+      var hitMat = new THREE.MeshBasicMaterial({transparent:true, opacity:0, depthWrite:false});
+      var hitArea = new THREE.Mesh(hitGeo, hitMat);
+      hitArea.position.copy(p); hitArea.userData.node = nd; group.add(hitArea);
+      nd.hitArea = hitArea; pickables.push(hitArea);
       if(nd.live){
         var halo = isDomain && nd.lib==="personal"
           ? glowSprite(0.48, "rgba(233,149,164,0.92)", "rgba(233,149,164,0.34)", "rgba(233,149,164,0)")
@@ -2193,8 +2235,9 @@ window.addEventListener("load", function(){
       if(!dragging) return;
       dragging=false; canvas.classList.remove("grabbing");
       if(!moved){
-        // Visual-only home: clicks stay inside the brain, without opening card layers.
-        return;
+        var nd = pick(ev);
+        if(nd && nd.kind==="domain" && window.__brain.openDomain) window.__brain.openDomain(nd.lib, nd.domain);
+        else if(nd && window.__brain.openKnowledge) window.__brain.openKnowledge("business");
       }
     }
     canvas.addEventListener("pointerup", endDrag);
@@ -2238,6 +2281,7 @@ window.addEventListener("load", function(){
           nd.core.position.copy(nd.pos.clone().multiplyScalar(1 + bob));
           if(nd.halo) nd.halo.position.copy(nd.core.position);
           if(nd.ring) nd.ring.position.copy(nd.core.position);
+          if(nd.hitArea) nd.hitArea.position.copy(nd.core.position);
         }
       });
 
