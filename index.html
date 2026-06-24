@@ -175,6 +175,15 @@
   .mini-action:hover{color:var(--text)}
   :focus-visible{outline:2px solid var(--live); outline-offset:2px}
 
+  body{height:100vh; min-height:100vh; padding:0; overflow:hidden}
+  .wrap{max-width:none; min-height:100vh; padding:0}
+  .app-head{position:fixed; left:22px; top:18px; right:22px; z-index:8; display:flex; padding:0; pointer-events:none}
+  .mark{gap:0; font-size:20px; pointer-events:auto}
+  .mark .glyph,.head-actions,.hero__copy,.domain-dock,.brain-input,.hero__bar,.domain-focus,.today,.bar,.quick-row,#grid,.foot,.modal,.drawer,.cmd{display:none !important}
+  .hero{min-height:100vh; padding:0}
+  .brain-shell{display:grid; place-items:center; min-height:100vh}
+  .brain-stage{width:100%; max-width:min(78vw,760px); height:min(72vh,620px); min-height:420px}
+
   .today{margin:22px 0 24px; border:1px solid var(--line); border-radius:14px;
     background:linear-gradient(180deg, rgba(35,39,51,.86), rgba(28,31,39,.96)); padding:18px}
   .today__head{display:flex; align-items:flex-start; justify-content:space-between; gap:14px; flex-wrap:wrap; margin-bottom:14px}
@@ -353,7 +362,7 @@
     .search{order:3; flex-basis:100%}
     .view-toggle{order:4}
     .brain-input{width:min(300px,calc(100% - 28px)); height:42px; margin-bottom:14px}
-    .brain-stage{height:min(36vh,300px); min-height:230px; max-width:300px}
+    .brain-stage{height:min(56vh,430px); min-height:300px; max-width:min(86vw,390px)}
     .hero__bar{gap:12px}
     .domain-focus{bottom:10px; width:calc(100vw - 20px); max-height:78vh; padding:14px; border-radius:14px}
     .drawer__panel{padding:20px}
@@ -2184,9 +2193,8 @@ window.addEventListener("load", function(){
       if(!dragging) return;
       dragging=false; canvas.classList.remove("grabbing");
       if(!moved){
-        var nd = pick(ev);
-        if(nd && nd.kind==="domain" && window.__brain.openDomain) window.__brain.openDomain(nd.lib, nd.domain);
-        else if(nd && window.__brain.openKnowledge) window.__brain.openKnowledge("business");
+        // Visual-only home: clicks stay inside the brain, without opening card layers.
+        return;
       }
     }
     canvas.addEventListener("pointerup", endDrag);
