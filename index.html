@@ -132,6 +132,10 @@
   .domain-node-card p{font-size:12.5px; color:#BFD0D0; margin:0; overflow-wrap:anywhere}
   .domain-node-card__meta{display:flex; justify-content:space-between; gap:10px; font-family:var(--mono); font-size:10px; color:var(--faint)}
   .domain-empty{position:relative; border:1px dashed var(--line); border-radius:12px; padding:22px; color:var(--muted); text-align:center}
+  .decision-result{grid-column:1/-1; border:1px solid rgba(122,231,216,.18); border-radius:10px;
+    background:rgba(8,13,19,.48); padding:14px}
+  .decision-result p{margin:0; color:#D8E5E2; font-size:13.5px}
+  .decision-result ul{margin:10px 0 0; padding-left:18px; color:var(--muted); font-size:12.5px}
 
   .bar{display:flex; align-items:center; gap:14px; flex-wrap:wrap;
     margin:26px 0 16px; padding-bottom:16px; border-bottom:1px solid var(--line)}
@@ -688,18 +692,26 @@
   var TYPES = ["框架","决策","事实","操作","开放问题","偏好","反思·洞察"];
 
   var DEFAULT_BUSINESS_CARDS = [
-    {id:"card-0001", lib:"business", domain:"电商", type:"框架", sample:true,
-     title:"",
-     body:"订阅设计师 Patreon → 拿实体打印商业授权 → 亚马逊卖给没打印机、也不会去订阅的终端客户。本质是「订阅+设备」的信息差变现。订阅一断，销售权通常立即失效。",
-     conf:"high", status:"active", links:1},
-    {id:"card-0002", lib:"business", domain:"电商", type:"决策", sample:true,
-     title:"",
-     body:"二创 IP（宝可梦/漫威/品牌 logo 等）在 Etsy 灰色生存，独立站绝对不能上——侵权下架+封支付。所有 STL 必须原创建模或拿到白纸黑字的商用授权。",
-     conf:"high", status:"active", links:1},
-    {id:"card-0003", lib:"business", domain:"电商", type:"决策", sample:true,
-     title:"",
-     body:"情绪叙事摆件 / 自研炫彩可动龙 / EDC 解压滑块。其中滑块蓝海度最高：成人自用刚需、复购稳、体积小利于跨境物流，且没被「龙/动物」卷烂。",
-     conf:"medium", status:"active", links:0}
+    {id:"card-0101", lib:"business", domain:"电商", type:"决策", sample:false, title:"独立站 IP 红线", body:"二创 IP（宝可梦 / Zootopia / Gorilla Tag 等）在 Etsy 灰色生存，独立站绝对不能上——侵权下架 + 封支付。所有 STL 必须原创建模或拿到白纸黑字的商用授权。", context:"Etsy 选品分析里反复出现的雷", conf:"high", source:"Etsy选品分析 2026-06", status:"active", links:0},
+    {id:"card-0102", lib:"business", domain:"电商", type:"事实", sample:false, title:"Cobotech 商用授权硬条款", body:"Commercial 档（Patreon $10/月）：可售实体打印件，每月 10 个新模型 + 欢迎包 20 个。硬性义务：每个 listing 必须显示 Authorized Seller 徽章 + 「Designed by Cobotech.」署名；禁转售 / 分发 STL；禁用 Cobotech 官方照片（必须自拍）；取消订阅 = 销售授权自动作废。违反署名 → 封号 / 撤权 / 被举报侵权。", context:"Patreon 订阅条款原文逐条拆解", conf:"high", source:"Cobotech授权梳理 2026-06", status:"active", links:0},
+    {id:"card-0103", lib:"business", domain:"电商", type:"开放问题", sample:false, title:"改色权限是灰区，冻结改色 SKU 待书面确认", body:"切片阶段改小模块颜色（不动几何）条款没明文禁止，但也没任何书面授权——属灰区。已发邮件 tracy.pqt@cobotech.us 问：改色是否允许 / 销售区域范围 / 订阅失效后库存怎么处理。在拿到书面确认前，冻结所有改色 SKU，只上原色模型。", context:"不能用「没禁止」当「被允许」", conf:"high", source:"Cobotech授权梳理 2026-06", status:"active", links:0},
+    {id:"card-0104", lib:"business", domain:"电商", type:"决策", sample:false, title:"只用自拍产品图，不用官图、不用 AI 生成图", body:"授权硬条款禁用 Cobotech 官方照片；AI 生成图另有虚假呈现、IP 授权、亚马逊政策三重风险。Hero 图、产品图全部自己拍 / 渲染。", context:"合规 + 平台政策双重约束", conf:"high", source:"Shopify主题合规 2026-06", status:"active", links:0},
+    {id:"card-0105", lib:"business", domain:"电商", type:"反思·洞察", sample:false, title:"真正的增长天花板是履约产能，不是点子或工具", body:"想法和工具都不缺，卡死增长的是打印良率和发货能接多少单。扩张前先把产能这条基准跑通，否则上再多 SKU 也是虚的。", context:"反复被验证的结构性判断", conf:"high", source:"战略地图讨论 2026-06", status:"active", links:0},
+    {id:"card-0106", lib:"business", domain:"电商", type:"事实", sample:false, title:"AMS 四色天花板是目录的结构性瓶颈", body:"Bambu P1S + 0.4mm 喷嘴 + 标准 AMS 四槽。Cobotech 11 个模型里 8 个超过四色——这是品类级瓶颈，不是单个模型问题。超四色的要么拆色简化、要么排后。", context:"Spider Buddy 等多体色装配件实测", conf:"high", source:"Cobotech打样分析 2026-06", status:"active", links:0},
+    {id:"card-0107", lib:"business", domain:"电商", type:"操作", sample:false, title:"打印故障三个常见根因", body:"① 多体色块比 ~0.85mm 窄时和 0.4mm 喷嘴不匹配 → 漏印 / 失败；② 层高要统一（项目 0.22mm vs 标准 0.20mm 别混）；③ 别混丝（槽 1 Generic PLA + 槽 2-4 Bambu PLA Basic 有粘接 / 出丝风险）。良率低先查这三处。", context:"打样良率低于预期时的排查清单", conf:"high", source:"Cobotech打样分析 2026-06", status:"active", links:0},
+    {id:"card-0108", lib:"business", domain:"电商", type:"决策", sample:false, title:"首个打样基准选 Cute Sleeping Husky", body:"四色、纯色丝、无薄壁风险、profile 一致——拿它做良率和全流程基准，跑通整条产线再放量，别一上来挑难的（如 51 件多体的 Spider Buddy）。", context:"用最干净的模型当产线基准", conf:"high", source:"Cobotech打样分析 2026-06", status:"active", links:0},
+    {id:"card-0109", lib:"business", domain:"电商", type:"框架", sample:false, title:"打样优先级 = 生产友好度 × 市场需求 四象限", body:"把候选模型按「生产友好度」和「市场需求」两轴铺成四象限排打样顺序，别凭感觉挑。高友好 × 高需求先上，低友好 × 低需求直接砍。", context:"打样排序方法", conf:"medium", source:"Cobotech打样分析 2026-06", status:"active", links:0},
+    {id:"card-0110", lib:"business", domain:"电商", type:"框架", sample:false, title:"选品反复出现的 8 个卖点", body:"跨品类高频复用：① 解压 / 焦虑缓解 ② ADHD / 感统 ③ 桌面伙伴 ④ 送礼 ⑤ 奇幻收藏 ⑥ 炫彩 / 夜光 / 变色差异化 ⑦ Star Seller 口碑背书 ⑧ 多尺寸 + 套装分层。情绪标签收敛在「治愈 / 陪伴 / 玩梗 / 怀旧」四象限。", context:"30 款 Etsy 热销品的卖点归纳", conf:"high", source:"Etsy选品分析 2026-06", status:"active", links:0},
+    {id:"card-0111", lib:"business", domain:"电商", type:"决策", sample:false, title:"独立站优先测三类，滑块最蓝", body:"① 情绪叙事摆件（情绪支持鹅 / 招手蜥蜴 meme，有人格化故事、易做内容、生产稳）② 自研炫彩可动龙（需求最大、客单 $20-40，但必须原创或授权）③ EDC 解压滑块（成人自用刚需、复购稳、体积小利跨境、还没被龙 / 动物卷烂——蓝海度最高）。", context:"差异化壁垒 × 情绪钩子 × 供应链可控性", conf:"medium", source:"Etsy选品分析 2026-06", status:"active", links:0},
+    {id:"card-0112", lib:"business", domain:"电商", type:"事实", sample:false, title:"可动龙和动物是最饱和品类", body:"Etsy 上 articulated dragon / animal 占比最高、最卷。差异点在猎奇混种（带翅膀的美西螈龙这类）和大尺寸款，靠配色和尺寸做溢价。", context:"品类红海判断", conf:"medium", source:"Etsy选品分析 2026-06", status:"active", links:0},
+    {id:"card-0113", lib:"business", domain:"电商", type:"框架", sample:false, title:"关节件选品 4 道硬过滤", body:"不满足直接剔除：① 有商用授权、明确可售实体 ② print-in-place / flexi 形态，无需拼装、无 / 极少支撑 ③ 尺寸适合钥匙扣（成品 <8cm 或已含挂环版）④ 零第三方 IP（动漫 / 品牌 / 游戏角色一律排除）。", context:"钥匙扣形态选品的准入门槛", conf:"high", source:"钥匙扣选品 2026-06", status:"active", links:0},
+    {id:"card-0114", lib:"business", domain:"电商", type:"操作", sample:false, title:"设计师调研数据源优先级", body:"按顺序：① Patreon（经 graphtreon.com 榜单定位活跃设计师）② MakerWorld（页面有下载量 / 克重）③ Printables / Cults3D。克重在 MakerWorld 取页面值，其余标「需切片验证」，不编数据。", context:"找授权设计师的检索路径", conf:"high", source:"钥匙扣选品 2026-06", status:"active", links:0},
+    {id:"card-0115", lib:"business", domain:"电商", type:"决策", sample:false, title:"授权设计师 TOP3", body:"① Cobotech（$10/月，专门钥匙扣 SKU，机甲 / 骷髅风，Etsy 饱和度较低）② MatMire Makes（原创角色 IP，前迪士尼动画师，每月钥匙扣 bonus）③ Flexi Factory（成熟 flexi 品牌，平台销售无限制）。", context:"8 进 3 的综合排序：授权成本低 + Etsy 有动销 + 视觉强", conf:"high", source:"钥匙扣选品 2026-06", status:"active", links:0},
+    {id:"card-0116", lib:"business", domain:"电商", type:"框架", sample:false, title:"Patreon 授权套利链", body:"订阅设计师 Patreon → 拿实体打印商用授权 → 卖给没打印机、也不会去订阅的终端客户。本质是「订阅 + 设备」的信息差变现。订阅一断，销售权立即失效。", context:"整个商业模式的底层逻辑", conf:"high", source:"商业模式讨论 2026-06", status:"active", links:0},
+    {id:"card-0117", lib:"business", domain:"电商", type:"框架", sample:false, title:"客单价靠多尺寸 + 套装分层", body:"单个 SKU 拆成小 / 中 / 大三档 + bundle 套装，把客单从 $10-16 拉到 $20-40。尺寸和套装是最便宜的溢价杠杆。", context:"Etsy 高客单店的通用手法", conf:"medium", source:"Etsy选品分析 2026-06", status:"active", links:0},
+    {id:"card-0118", lib:"business", domain:"电商", type:"操作", sample:false, title:"Shopify 是跨机唯一真相源", body:"任何机器开工前 `shopify theme pull`，完工 `shopify theme push`。认证用 store handle `kimzee-7378.myshopify.com`，不用自定义域名 k1mzee.com。推到已有主题 143384608834，别新建、别 --unpublished。", context:"Mac / Windows 双机协作纪律", conf:"high", source:"Shopify主题 2026-06", status:"active", links:0},
+    {id:"card-0119", lib:"business", domain:"电商", type:"决策", sample:false, title:"渠道结构 = Shopify 独立站 + Amazon US", body:"两个营收引擎：Shopify（独立站 FBM，已上线、支付配好）+ Amazon US（计划中）。关节 / flexi 是当前设备的最优品类，主打它。", context:"渠道与品类定位", conf:"medium", source:"战略地图讨论 2026-06", status:"active", links:0},
+    {id:"card-0120", lib:"business", domain:"电商", type:"偏好", sample:false, title:"选品调研工作偏好", body:"一次完成、不发散；只要数据和清单，不要塞策略评论；拿不到的数据标「未验证 / 需切片验证」，绝不编造精确数字。给我框架和判断，执行 / 解析交给 CC。", context:"和 AI 协作时的工作方式偏好", conf:"high", source:"多次选品任务 2026-06", status:"active", links:0}
   ];
 
   var LEGACY_STORE_KEY = "brain_two_cards_v1";
@@ -707,7 +719,9 @@
     business:"brain_two_business_cards_v1",
     personal:"brain_two_personal_cards_v1"
   };
+  var AI_ENDPOINT_STORE_KEY = "brain_two_review_endpoint_v1";
   var shouldCleanupLegacy = false;
+  var shouldPersistDefaultBusiness = false;
   var cards = [];
 
   function toText(v){return v==null ? "" : String(v);}
@@ -743,6 +757,12 @@
   function normalizeList(list, lib){
     return (Array.isArray(list)?list:[]).map(function(c){return normalizeCard(c, lib);}).filter(Boolean);
   }
+  function isLegacySampleBusiness(list){
+    if(!Array.isArray(list) || list.length!==3) return false;
+    var ids = {};
+    list.forEach(function(c){ ids[toText(c && c.id)] = true; });
+    return ids["card-0001"] && ids["card-0002"] && ids["card-0003"];
+  }
 
   var storage = {
     read:function(key){ try{ var s=localStorage.getItem(key); return s?JSON.parse(s):null; }catch(e){ return null; } },
@@ -758,6 +778,7 @@
         }
       }
       if(!Array.isArray(business)) business = DEFAULT_BUSINESS_CARDS;
+      else if(isLegacySampleBusiness(business)){ business = DEFAULT_BUSINESS_CARDS; shouldPersistDefaultBusiness = true; }
       if(!Array.isArray(personal)) personal = [];
       return normalizeList(business, "business").concat(normalizeList(personal, "personal"));
     },
@@ -771,6 +792,7 @@
     }
   };
   cards = storage.load();
+  if(shouldPersistDefaultBusiness){ storage.save(); shouldPersistDefaultBusiness = false; }
 
   var state = {lib:"business", domain:"all", type:"all", q:"", view:"grid"};
   var domainFocusState = null;
@@ -824,6 +846,129 @@
       if(state.q && (c.title+" "+c.body+" "+(c.context||"")+" "+(c.source||"")).toLowerCase().indexOf(state.q.toLowerCase())<0) return false;
       return true;
     });
+  }
+  function readSetting(key, fallback){
+    try{ return localStorage.getItem(key) || fallback; }catch(e){ return fallback; }
+  }
+  function aiRouteEndpoint(route){
+    var raw = (readSetting(AI_ENDPOINT_STORE_KEY, "mock://daily-review") || "").trim();
+    if(!raw || raw==="mock" || raw.indexOf("mock://")===0) return "";
+    var clean = raw.replace(/\/+$/, "");
+    if(/\/(review|decide)$/i.test(clean)) clean = clean.replace(/\/(review|decide)$/i, "");
+    return clean + "/" + route;
+  }
+  function tokenize(text){
+    var s = toText(text).toLowerCase();
+    var out = {};
+    s.split(/[^a-z0-9\u4e00-\u9fa5]+/i).forEach(function(part){
+      if(!part) return;
+      if(part.length>=2) out[part] = true;
+      if(/[\u4e00-\u9fa5]/.test(part)){
+        for(var i=0;i<part.length-1;i++) out[part.slice(i,i+2)] = true;
+        for(var j=0;j<part.length-2;j++) out[part.slice(j,j+3)] = true;
+      }
+    });
+    return Object.keys(out).slice(0, 80);
+  }
+  function selectBusinessCards(question, limit){
+    var terms = tokenize(question);
+    var scored = cards.filter(function(c){return c.lib==="business";}).map(function(c){
+      var text = (c.title+" "+c.body+" "+c.context+" "+c.domain+" "+c.type).toLowerCase();
+      var score = 0;
+      terms.forEach(function(t){ if(text.indexOf(t)>-1) score += Math.min(6, t.length); });
+      return {card:c, score:score};
+    }).filter(function(x){return x.score>0;}).sort(function(a,b){return b.score-a.score;});
+    return scored.slice(0, limit || 8).map(function(x){return x.card;});
+  }
+  function publicCard(c){
+    return {
+      id:c.id, domain:c.domain, type:c.type, title:c.title, body:c.body,
+      context:c.context, conf:c.conf, source:c.source
+    };
+  }
+  function mockDecision(question, relevant){
+    if(!relevant.length){
+      return {answer:"现有业务卡不足以支撑这个判断。先补充更贴近问题的卡，再做决定。", basedOnCardIds:[], caveats:["mock 模式：只做本地相关卡检索，不调用真 AI。"]};
+    }
+    return {
+      answer:"mock 决策：先按这些卡里的硬约束做保守判断。若问题涉及授权、履约产能或平台合规，优先挡风险，再做小样本验证。",
+      basedOnCardIds:relevant.slice(0,3).map(function(c){return c.id;}),
+      caveats:["mock 模式未调用 DeepSeek。", "真 AI 接入后会只基于喂入卡片给出更具体建议。"]
+    };
+  }
+  function renderDecisionFocus(question, decision, relevant){
+    var box = $("#domainFocus");
+    if(!box) return;
+    $("#domainFocusKicker").textContent = "决策助手";
+    $("#domainFocusTitle").textContent = question;
+    $("#domainFocusMeta").textContent = (decision.basedOnCardIds || []).join(" · ") || "卡片不足";
+    $("#domainFocusGrid").innerHTML =
+      '<div class="decision-result"><p>'+esc(decision.answer || "")+'</p>'+
+      '<ul>'+((decision.caveats || []).map(function(x){return '<li>'+esc(x)+'</li>';}).join(""))+'</ul></div>'+
+      relevant.map(function(c){
+        return '<article class="domain-node-card" tabindex="0" role="button" data-domain-card="'+esc(c.id)+'" aria-label="卡片">'+
+          '<div class="domain-node-card__meta"><span></span><span></span></div><h3></h3><p></p></article>';
+      }).join("");
+    box.hidden = false;
+  }
+  function askDecision(question){
+    question = toText(question).trim();
+    if(!question) return Promise.resolve(null);
+    var relevant = selectBusinessCards(question, 8);
+    var endpoint = aiRouteEndpoint("decide");
+    var pending = {answer:"...", basedOnCardIds:relevant.map(function(c){return c.id;}), caveats:[]};
+    renderDecisionFocus(question, pending, relevant);
+    var payload = {question:question, cards:relevant.map(publicCard)};
+    var request = endpoint ? fetch(endpoint, {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify(payload)
+    }).then(function(resp){
+      if(!resp.ok) throw new Error("decide endpoint failed: "+resp.status);
+      return resp.json();
+    }) : Promise.resolve(mockDecision(question, relevant));
+    return request.then(function(decision){
+      if(!decision || typeof decision!=="object") throw new Error("decision payload invalid");
+      decision.answer = toText(decision.answer);
+      decision.basedOnCardIds = Array.isArray(decision.basedOnCardIds) ? decision.basedOnCardIds.map(toText).filter(Boolean) : [];
+      decision.caveats = Array.isArray(decision.caveats) ? decision.caveats.map(toText).filter(Boolean) : [];
+      renderDecisionFocus(question, decision, relevant);
+      return decision;
+    }).catch(function(err){
+      renderDecisionFocus(question, {answer:"决策助手暂时不可用。", basedOnCardIds:[], caveats:[err && err.message ? err.message : "endpoint 无响应"]}, relevant);
+      return null;
+    });
+  }
+  function promoteReviewCards(review, date){
+    if(!review || !Array.isArray(review.promotedCards) || !review.promotedCards.length) return [];
+    var made = [];
+    review.promotedCards.slice(0, 3).forEach(function(raw, idx){
+      var lib = raw && raw.lib==="personal" ? "personal" : "business";
+      var base = normalizeCard({
+        id:"card-"+toText(date).replace(/[^0-9]/g,"")+"-"+String(Date.now()).slice(-5)+"-"+idx,
+        lib:lib,
+        domain:raw && raw.domain,
+        type:raw && raw.type || "反思·洞察",
+        title:raw && raw.title,
+        body:raw && raw.body,
+        context:raw && raw.context,
+        conf:raw && raw.conf || "medium",
+        source:date,
+        status:"active",
+        links:0
+      }, lib);
+      if(!base || !base.body) return;
+      var duplicate = cards.some(function(c){return c.lib===base.lib && c.source===base.source && c.body===base.body;});
+      if(duplicate) return;
+      cards.push(base);
+      made.push(base.id);
+    });
+    if(made.length){
+      storage.save();
+      render();
+      renderDomainDock();
+    }
+    return made;
   }
   function renderQuickRow(list){
     var quick = $("#quickRow");
@@ -1049,6 +1194,12 @@
   $("#domainFocusOpenAll").addEventListener("click", function(){
     openKnowledge(domainFocusState ? domainFocusState.lib : state.lib);
   });
+  $("#brainInput").addEventListener("keydown", function(e){
+    if(e.key==="Enter" && !e.shiftKey){
+      e.preventDefault();
+      askDecision(e.target.value);
+    }
+  });
   $("#quickRow").addEventListener("click", function(e){
     var clear = e.target.closest("[data-clear]");
     if(clear){
@@ -1094,6 +1245,8 @@
   window.__brain.openCapture = openModal;
   window.__brain.openDomain = openDomain;
   window.__brain.openKnowledge = openKnowledge;
+  window.__brain.askDecision = askDecision;
+  window.__brain.promoteReviewCards = promoteReviewCards;
   window.__brain.getDomainNodes = domainSummaries;
   window.__brain.getCardsForDomain = function(lib, domain){return cardsForDomain(lib, domain).slice();};
   $("#captureBtn").addEventListener("click", openModal);
@@ -1599,15 +1752,22 @@
       generatedAt:new Date().toISOString()
     };
   }
+  function aiRouteEndpoint(raw, route){
+    var endpoint = (raw || "").trim();
+    if(!endpoint || endpoint==="mock" || endpoint.indexOf("mock://")===0) return "";
+    endpoint = endpoint.replace(/\/+$/, "");
+    if(/\/(review|decide)$/i.test(endpoint)) endpoint = endpoint.replace(/\/(review|decide)$/i, "");
+    return endpoint + "/" + route;
+  }
   function requestReview(day){
-    var endpoint = ($("#reviewEndpoint").value || "mock://daily-review").trim();
-    if(!endpoint || endpoint==="mock" || endpoint.indexOf("mock://")===0){
+    var endpoint = aiRouteEndpoint($("#reviewEndpoint").value || "mock://daily-review", "review");
+    if(!endpoint){
       return Promise.resolve(buildMockReview(day));
     }
     return fetch(endpoint, {
       method:"POST",
       headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({day:day})
+      body:JSON.stringify({date:currentDate, day:day})
     }).then(function(resp){
       if(!resp.ok) throw new Error("review endpoint failed: "+resp.status);
       return resp.json();
@@ -1662,6 +1822,12 @@
     $("#reviewStatus").textContent = "正在生成复盘...";
     requestReview(day).then(function(review){
       day.review = review;
+      if(window.__brain.promoteReviewCards){
+        var made = window.__brain.promoteReviewCards(review, currentDate);
+        if(made.length){
+          review.promotedCardIds = Array.from(new Set((review.promotedCardIds || []).concat(made)));
+        }
+      }
       days[currentDate] = day;
       persistDays();
       renderReview(day);
