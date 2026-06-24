@@ -49,6 +49,12 @@
     letter-spacing:0; max-width:620px; text-wrap:balance}
   .hero__lede{font-size:14px; color:#B8C7C9; max-width:520px; margin:16px 0 0}
   .brain-shell{grid-column:1; grid-row:1; position:relative; min-width:0; width:100%}
+  .brain-input{display:block; width:min(420px,calc(100% - 40px)); height:46px; margin:0 auto 18px;
+    resize:none; color:var(--text); caret-color:var(--live); background:rgba(8,13,19,.28);
+    border:1px solid rgba(122,231,216,.24); border-radius:12px; padding:11px 13px;
+    font:14px/1.4 var(--body); outline:none; backdrop-filter:blur(10px);
+    box-shadow:0 18px 60px -54px rgba(122,231,216,.72)}
+  .brain-input:focus{border-color:rgba(122,231,216,.62); box-shadow:0 0 0 3px rgba(122,231,216,.10)}
   .brain-stage{position:relative; width:100%; max-width:560px; height:min(52vh,430px); min-height:300px; margin:0 auto}
   .brain-stage canvas{display:block; width:100%; height:100%; touch-action:none; cursor:grab}
   .brain-stage canvas.grabbing{cursor:grabbing}
@@ -111,9 +117,17 @@
   .domain-focus__meta{font-size:12px; color:var(--muted); margin:7px 0 0}
   .domain-focus__actions{display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end}
   .domain-focus__grid{position:relative; display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:12px}
-  .domain-node-card{min-width:0; border:1px solid rgba(122,231,216,.18); border-radius:10px; background:rgba(8,13,19,.42);
-    padding:13px; cursor:pointer; transition:transform .16s ease, border-color .16s ease, background .16s ease}
+  .domain-node-card{position:relative; min-width:0; min-height:112px; border:1px solid rgba(122,231,216,.18);
+    border-radius:10px; background:radial-gradient(circle at 50% 42%, rgba(122,231,216,.22), transparent 34%), rgba(8,13,19,.42);
+    padding:13px; cursor:pointer; overflow:hidden; transition:transform .16s ease, border-color .16s ease, background .16s ease}
+  .domain-node-card::before{content:""; position:absolute; left:50%; top:50%; width:28px; height:28px;
+    transform:translate(-50%,-50%) rotate(18deg); background:var(--live);
+    clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 56%,79% 91%,50% 70%,21% 91%,32% 56%,2% 35%,39% 35%);
+    filter:drop-shadow(0 0 15px rgba(122,231,216,.72)); opacity:.92}
+  .domain-node-card::after{content:""; position:absolute; inset:18px; border:1px solid rgba(122,231,216,.12);
+    border-radius:999px; transform:rotate(-10deg)}
   .domain-node-card:hover{transform:translateY(-2px); border-color:rgba(122,231,216,.55); background:rgba(19,31,41,.72)}
+  .domain-node-card > *{display:none}
   .domain-node-card h3{font-family:var(--display); font-weight:500; font-size:15.5px; line-height:1.25; margin:8px 0 6px}
   .domain-node-card p{font-size:12.5px; color:#BFD0D0; margin:0; overflow-wrap:anywhere}
   .domain-node-card__meta{display:flex; justify-content:space-between; gap:10px; font-family:var(--mono); font-size:10px; color:var(--faint)}
@@ -121,6 +135,7 @@
 
   .bar{display:flex; align-items:center; gap:14px; flex-wrap:wrap;
     margin:26px 0 16px; padding-bottom:16px; border-bottom:1px solid var(--line)}
+  .bar,.quick-row,#grid{display:none}
   .tabs{display:flex; gap:4px; background:var(--surface); border:1px solid var(--line); border-radius:9px; padding:4px}
   .tab{font-family:inherit; font-size:13.5px; font-weight:600; color:var(--muted); background:none;
     border:none; cursor:pointer; padding:6px 13px; border-radius:6px; letter-spacing:.3px}
@@ -333,6 +348,7 @@
     .grid.is-list .card{display:flex}
     .search{order:3; flex-basis:100%}
     .view-toggle{order:4}
+    .brain-input{width:min(300px,calc(100% - 28px)); height:42px; margin-bottom:14px}
     .brain-stage{height:min(36vh,300px); min-height:230px; max-width:300px}
     .hero__bar{gap:12px}
     .domain-focus{bottom:10px; width:calc(100vw - 20px); max-height:78vh; padding:14px; border-radius:14px}
@@ -371,6 +387,7 @@
     </div>
     <div class="domain-dock" id="domainDock" aria-label="领域知识库"></div>
     <div class="brain-shell">
+      <textarea class="brain-input" id="brainInput" rows="1" aria-label="输入"></textarea>
       <div class="brain-stage" id="stage">
         <div class="fallback" id="fallback" hidden>3D 大脑需要 WebGL。换支持 WebGL 的浏览器即可看到立体版。</div>
       </div>
@@ -672,15 +689,15 @@
 
   var DEFAULT_BUSINESS_CARDS = [
     {id:"card-0001", lib:"business", domain:"电商", type:"框架", sample:true,
-     title:"Patreon 授权套利链",
+     title:"",
      body:"订阅设计师 Patreon → 拿实体打印商业授权 → 亚马逊卖给没打印机、也不会去订阅的终端客户。本质是「订阅+设备」的信息差变现。订阅一断，销售权通常立即失效。",
      conf:"high", status:"active", links:1},
     {id:"card-0002", lib:"business", domain:"电商", type:"决策", sample:true,
-     title:"独立站 IP 红线",
+     title:"",
      body:"二创 IP（宝可梦/漫威/品牌 logo 等）在 Etsy 灰色生存，独立站绝对不能上——侵权下架+封支付。所有 STL 必须原创建模或拿到白纸黑字的商用授权。",
      conf:"high", status:"active", links:1},
     {id:"card-0003", lib:"business", domain:"电商", type:"决策", sample:true,
-     title:"独立站优先测三类",
+     title:"",
      body:"情绪叙事摆件 / 自研炫彩可动龙 / EDC 解压滑块。其中滑块蓝海度最高：成人自用刚需、复购稳、体积小利于跨境物流，且没被「龙/动物」卷烂。",
      conf:"medium", status:"active", links:0}
   ];
@@ -841,10 +858,8 @@
       $("#domainFocusGrid").innerHTML = '<div class="domain-empty">'+esc(domain || libName(lib))+' 还没有卡片</div>';
     } else {
       $("#domainFocusGrid").innerHTML = list.map(function(c){
-        return '<article class="domain-node-card" tabindex="0" role="button" data-domain-card="'+esc(c.id)+'">'+
-          '<div class="domain-node-card__meta"><span>'+esc(c.type)+'</span><span>'+esc(c.conf)+'</span></div>'+
-          '<h3>'+esc(c.title || "未命名卡片")+'</h3>'+
-          '<p>'+esc(c.body || "—")+'</p></article>';
+        return '<article class="domain-node-card" tabindex="0" role="button" data-domain-card="'+esc(c.id)+'" aria-label="卡片">'+
+          '<div class="domain-node-card__meta"><span></span><span></span></div><h3></h3><p></p></article>';
       }).join("");
     }
     box.hidden = false;
@@ -946,7 +961,7 @@
   function openDetail(id){
     var c = findCard(id); if(!c) return;
     $("#drawerKicker").textContent = libName(c.lib)+" · "+c.domain+" · "+c.type;
-    $("#drawerTitle").textContent = c.title || "未命名卡片";
+    $("#drawerTitle").textContent = "";
     $("#drawerBody").textContent = c.body || "—";
     $("#drawerFacts").innerHTML =
       fact("id", c.id)+fact("confidence", c.conf)+fact("status", c.status)+fact("links", String(c.links||0))+
@@ -1861,6 +1876,33 @@ window.addEventListener("load", function(){
       var m = new THREE.Sprite(new THREE.SpriteMaterial({map:tex, blending:THREE.AdditiveBlending, depthWrite:false, transparent:true}));
       m.scale.set(size,size,1); return m;
     }
+    function starSprite(size, color, soft){
+      var c = document.createElement("canvas"); c.width=c.height=96;
+      var g = c.getContext("2d");
+      var grd = g.createRadialGradient(48,48,0,48,48,46);
+      grd.addColorStop(0, soft || "rgba(122,231,216,0.72)");
+      grd.addColorStop(0.42, "rgba(122,231,216,0.16)");
+      grd.addColorStop(1, "rgba(122,231,216,0)");
+      g.fillStyle = grd; g.fillRect(0,0,96,96);
+      g.save(); g.translate(48,48); g.rotate(Math.PI/10);
+      g.beginPath();
+      for(var i=0;i<10;i++){
+        var r = i%2===0 ? 23 : 9;
+        var a = -Math.PI/2 + i*Math.PI/5;
+        var x = Math.cos(a)*r, y = Math.sin(a)*r;
+        if(i===0) g.moveTo(x,y); else g.lineTo(x,y);
+      }
+      g.closePath();
+      g.fillStyle = color;
+      g.shadowColor = color;
+      g.shadowBlur = 18;
+      g.fill();
+      g.restore();
+      var tex = new THREE.CanvasTexture(c);
+      var sprite = new THREE.Sprite(new THREE.SpriteMaterial({map:tex, blending:THREE.AdditiveBlending, depthWrite:false, transparent:true}));
+      sprite.scale.set(size,size,1);
+      return sprite;
+    }
 
     var pickables = [];
     NODES.forEach(function(nd){
@@ -1869,11 +1911,9 @@ window.addEventListener("load", function(){
       nd.pos = p;
       var isDomain = nd.kind==="domain";
       var coreColor = !nd.live ? 0x47526a : (isDomain ? (nd.lib==="personal" ? 0xE995A4 : 0x7AE7D8) : 0xF0B45E);
-      var core = new THREE.Mesh(
-        new THREE.SphereGeometry(isDomain ? 0.07 + Math.min(nd.count, 8)*0.004 : (nd.live?0.058:0.05), 28, 28),
-        nd.live ? new THREE.MeshBasicMaterial({color:coreColor})
-                : new THREE.MeshBasicMaterial({color:coreColor, transparent:true, opacity:0.95})
-      );
+      var core = starSprite(isDomain ? 0.20 + Math.min(nd.count, 8)*0.012 : (nd.live?0.16:0.13),
+        "#"+coreColor.toString(16).padStart(6,"0"),
+        isDomain && nd.lib==="personal" ? "rgba(233,149,164,0.56)" : "rgba(122,231,216,0.56)");
       core.position.copy(p); core.userData.node = nd; group.add(core);
       nd.core = core; pickables.push(core);
       if(nd.live){
@@ -1980,7 +2020,7 @@ window.addEventListener("load", function(){
       if(!moved){
         var nd = pick(ev);
         if(nd && nd.kind==="domain" && window.__brain.openDomain) window.__brain.openDomain(nd.lib, nd.domain);
-        else if(window.__brain.openKnowledge) window.__brain.openKnowledge("business");
+        else if(nd && window.__brain.openKnowledge) window.__brain.openKnowledge("business");
       }
     }
     canvas.addEventListener("pointerup", endDrag);
